@@ -11,6 +11,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  shared_preferences:
+
+  google_maps_flutter:
+  geolocator: 
 
 dev_dependencies:
   flutter_test:
