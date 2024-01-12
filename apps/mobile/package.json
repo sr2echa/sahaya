@@ -1,0 +1,12 @@
+{
+  "name": "mobile",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "flutter run",
+    "build": "flutter build apk",
+    "start": "flutter run",
+    "lint": "flutter analyze",
+    "test": "flutter test"
+  }
+}

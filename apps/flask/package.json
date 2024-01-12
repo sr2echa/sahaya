@@ -1,0 +1,12 @@
+{
+  "name": "flask",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "python main.py",
+    "start": "",
+    "build": "",
+    "lint": "",
+    "test": ""
+  }
+}
