@@ -11,8 +11,10 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  google_fonts:
+  intl_phone_field:
+  url_launcher:
   shared_preferences:
-
   google_maps_flutter:
   geolocator: 
 
@@ -20,12 +22,15 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^2.0.0
+  flutter_lints: ^3.0.1
   flutter_launcher_icons: "^0.13.1"
 
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icon/
+    - assets/background/
 
 flutter_launcher_icons:
   android: true
