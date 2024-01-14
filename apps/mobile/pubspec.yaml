@@ -14,6 +14,7 @@ dependencies:
   flutter_config:
   permission_handler:
   google_fonts:
+  font_awesome_flutter:
   intl_phone_field:
   url_launcher:
   shared_preferences:
