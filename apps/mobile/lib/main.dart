@@ -1,4 +1,5 @@
 // main.dart
+import 'package:flutter_config/flutter_config.dart';
 
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,7 +8,9 @@ import 'getPhoneNumber.dart';
 import 'home.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+
+  WidgetsFlutterBinding.ensureInitialized(); // Load env
+  await FlutterConfig.loadEnvVariables();
   
   // Check if phone number is set
   final prefs = await SharedPreferences.getInstance();

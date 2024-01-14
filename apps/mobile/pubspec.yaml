@@ -11,6 +11,7 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.2
+  flutter_config:
   google_fonts:
   intl_phone_field:
   url_launcher:
@@ -29,6 +30,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - .env
     - assets/icon/
     - assets/background/
 
