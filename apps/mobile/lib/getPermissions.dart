@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home.dart';
 
@@ -11,6 +12,16 @@ class GetPermissions extends StatefulWidget {
 class _GetPermissionsState extends State<GetPermissions> {
   bool locationPermissionGranted = false;
   bool smsPermissionGranted = false;
+
+  void _updatePermissionStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (locationPermissionGranted && smsPermissionGranted) {
+      await prefs.setBool('permissionsGranted', true);
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => Home()),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +85,16 @@ class _GetPermissionsState extends State<GetPermissions> {
                     ),
                     elevation: 0,
                   ),
+                  // onPressed: locationPermissionGranted && smsPermissionGranted
+                  //     ? () {
+                  //         Navigator.of(context).pushReplacement(
+                  //           MaterialPageRoute(builder: (context) => Home()),
+                  //         );
+                  //       }
+                  //     : null,
                   onPressed: locationPermissionGranted && smsPermissionGranted
-                      ? () {
-                          Navigator.of(context).pushReplacement(
-                            MaterialPageRoute(builder: (context) => Home()),
-                          );
-                        }
-                      : null,
+                    ? _updatePermissionStatus
+                    : null,
                   child: Text(
                     'Submit',
                     style: GoogleFonts.getFont(

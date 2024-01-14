@@ -34,6 +34,7 @@ flutter:
     - .env
     - assets/icon/
     - assets/background/
+    - assets/maps/
 
 flutter_launcher_icons:
   android: true
