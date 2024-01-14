@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'getPhoneNumber.dart';
-import 'home.dart';
+import 'getPermissions.dart';
+// import 'home.dart';
 
 void main() async {
 
@@ -31,7 +32,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: phoneNumber == null ? GetPhoneNumber() : Home(),
+      // home: phoneNumber == null ? GetPhoneNumber() : Home(),
+      home: phoneNumber == null ? GetPhoneNumber() : GetPermissions(),
     );
   }
 }

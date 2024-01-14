@@ -12,6 +12,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flutter_config:
+  permission_handler:
   google_fonts:
   intl_phone_field:
   url_launcher:
@@ -37,5 +38,5 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  adaptive_icon_background: "#ffffff"
+  adaptive_icon_background: "#ffffff" 
   image_path: "assets/icon/icon.png"

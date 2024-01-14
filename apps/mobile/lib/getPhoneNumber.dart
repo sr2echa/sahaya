@@ -4,7 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import 'home.dart';
+import 'getPermissions.dart';
+// import 'home.dart';
 
 class GetPhoneNumber extends StatefulWidget {
   @override
@@ -104,8 +105,11 @@ class _GetPhoneNumberState extends State<GetPhoneNumber> {
                         final prefs = await SharedPreferences.getInstance();
                         prefs.setString('phoneNumber', controller.text);
                         
+                        // Navigator.of(context).pushReplacement(
+                        //   MaterialPageRoute(builder: (context) => Home())  
+                        // );
                         Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => Home())  
+                          MaterialPageRoute(builder: (context) => GetPermissions()),
                         );
                       }
                       : null,
