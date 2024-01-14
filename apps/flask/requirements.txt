@@ -1,2 +1,5 @@
 Flask
 requests
+python-dontenv
+google-genrativeai
+gunicorn
