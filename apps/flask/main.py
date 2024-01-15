@@ -4,6 +4,13 @@ from dotenv import load_dotenv
 import google.generativeai as genai 
 import os
 
+import firebase_admin
+from firebase_admin import credentials
+
+cred = credentials.Certificate(r".\firebase.json")
+firebase_admin.initialize_app(cred)
+
+
 load_dotenv()
 
 WEATHER_API=os.getenv('WEATHERAPI_API_KEY')
@@ -22,8 +29,7 @@ def gemini():
     weather_pattern = requests.get(URL).json()
     genai.configure(api_key=GEMINI_API)
     model = genai.GenerativeModel('gemini-pro')
-    prompt= f"""This is the current weather at {city} : {weather_pattern['current']['temp_c']} in celsius
-    ans consider the data {weather_pattern} to determine the warninng text which is given in json file and then
+    prompt= f"""This is the current weather at {city} :   consider the data {weather_pattern} to determine the warninng text which is given in json file and then
     Give me a 1-2 Line warning incase of any Thunderstorm, Hurricane, Tornadoo, Tsunami, Hailstorm, Cyclone, Heatwave etc.
     The message should contain the time it is anticipated and what calamity.
     Also give me few precatuionary measures to be prepared for the particular calamity in {city}.

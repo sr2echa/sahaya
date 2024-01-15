@@ -1,5 +1,6 @@
 Flask
 requests
-python-dontenv
+python-dotenv
 google-genrativeai
 gunicorn
+firebase-admin
