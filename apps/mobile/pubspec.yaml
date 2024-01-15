@@ -20,6 +20,7 @@ dependencies:
   shared_preferences:
   google_maps_flutter:
   geolocator: 
+  material_segmented_control:
 
 dev_dependencies:
   flutter_test:
