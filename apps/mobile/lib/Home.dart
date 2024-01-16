@@ -8,7 +8,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // For custom icons
 // import 'package:material_segmented_control/material_segmented_control.dart';
 
+//mapcontroller has not been initialized error fix
+//https://stackoverflow.com/questions/63492211/flutter-google-maps-mapcontroller-has-not-been-initialized
 
+
+late GoogleMapController mapController;
 
 class Home extends StatefulWidget {
   @override
@@ -16,7 +20,6 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late GoogleMapController mapController;
   late LatLng currentLocation;
   bool locationLoaded = false;
   CameraPosition currentCameraPosition = CameraPosition(target: LatLng(0, 0), zoom: 0);
@@ -109,7 +112,7 @@ class _HomeState extends State<Home> {
       currentCameraPosition = CameraPosition(target: currentLocation, zoom: 15.0);
     });
   }
-
+  
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
     mapController.setMapStyle(_mapStyle);
@@ -130,6 +133,27 @@ class _HomeState extends State<Home> {
   //     prefs.setBool('mode', isHelping);
   //   });
   // }
+
+  Widget buildRecenterButton({
+    required GoogleMapController mapController,
+    required LatLng currentLocation,
+  }) {
+    return FloatingActionButton(
+      mini: false, // Set to true to create a smaller button
+      child: Icon(FontAwesomeIcons.streetView, color: Colors.black),
+      backgroundColor: Colors.white,
+      onPressed: () {
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentLocation,
+              zoom: 15.0, // Set the desired zoom level
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget buildFloatingActionButton({
     required bool isHelping,
@@ -155,6 +179,17 @@ class _HomeState extends State<Home> {
     );
   }
 
+  // Widget recenterBtn() {
+  //   return Positioned(
+  //     right: 20.0,
+  //     bottom: 90.0,
+  //     child: buildRecenterButton(
+  //       mapController: mapController, // Use the ! operator to tell Dart that you're sure it's not null here
+  //       currentLocation: currentLocation,
+  //     ),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,14 +211,23 @@ class _HomeState extends State<Home> {
               _buildFilterBar(),
             ]
           ),
-          Positioned(
-            right: 20.0,
-            bottom: 90.0,
-            child: buildRecenterButton(
-              mapController: mapController,
-              currentLocation: currentLocation,
-            ),
-          ),
+          // Positioned(
+          //   right: 20.0,
+          //   bottom: 90.0,
+          //   child: buildRecenterButton(
+          //     mapController: mapController,
+          //     currentLocation: currentLocation,
+          //   ),
+          // ),
+          // Positioned(
+          //   right: 20.0,
+          //   bottom: 20.0,
+          //   child: buildFloatingActionButton(
+          //     isHelping: isHelping,
+          //     currentLocation: currentLocation,
+          //     selectedFilter: selectedFilter,
+          //   ),
+          // ),
           Positioned(
             right: 20.0,
             bottom: 20.0,
@@ -193,32 +237,20 @@ class _HomeState extends State<Home> {
               selectedFilter: selectedFilter,
             ),
           ),
+          // recenterBtn(),
+          // Positioned(
+          //   right: 20.0,
+          //   bottom: 90.0,
+          //   child: buildRecenterButton(
+          //     mapController: mapController!, 
+          //     currentLocation: currentLocation,
+          //   ),
+          // ),
         ],
       ),
     );
   }
 
-
-  Widget buildRecenterButton({
-    required GoogleMapController mapController,
-    required LatLng currentLocation,
-  }) {
-    return FloatingActionButton(
-      mini: false, // Set to true to create a smaller button
-      child: Icon(FontAwesomeIcons.streetView, color: Colors.black),
-      backgroundColor: Colors.white,
-      onPressed: () {
-        mapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: currentLocation,
-              zoom: 15.0, // Set the desired zoom level
-            ),
-          ),
-        );
-      },
-    );
-  }
 
   // Set<Circle> _buildCircles() {
   //   return {
