@@ -1,18 +1,16 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'package:flutter/services.dart' show rootBundle; 
+import 'package:shared_preferences/shared_preferences.dart'; 
+
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:flutter/services.dart' show rootBundle; // For loading map style
-import 'package:shared_preferences/shared_preferences.dart'; // For storing user selection
-import 'package:google_fonts/google_fonts.dart'; // For custom fonts
+
+import 'package:google_fonts/google_fonts.dart'; 
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // For custom icons
+import 'package:font_awesome_flutter/font_awesome_flutter.dart'; 
 // import 'package:material_segmented_control/material_segmented_control.dart';
 
-//mapcontroller has not been initialized error fix
-//https://stackoverflow.com/questions/63492211/flutter-google-maps-mapcontroller-has-not-been-initialized
-
-
-late GoogleMapController mapController;
 
 class Home extends StatefulWidget {
   @override
@@ -20,77 +18,35 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  late LatLng currentLocation;
+
+  // <--------------------- Initializations --------------------->
+
+  Completer<GoogleMapController> _controllerCompleter = Completer();
+  late GoogleMapController mapController;
+  late LatLng currentLocation = LatLng(0, 0);
   bool locationLoaded = false;
   CameraPosition currentCameraPosition = CameraPosition(target: LatLng(0, 0), zoom: 0);
   String _mapStyle = '';
   bool isHelping = false;
 
   List<Map<String, dynamic>> filtersNeedHelp = [
-    {"type": "Hospital", "icon": FontAwesomeIcons.hospital},
-    {"type": "Relief Camp", "icon": FontAwesomeIcons.houseDamage},
+    {"type": "Hospital", "icon": FontAwesomeIcons.truckMedical},
+    {"type": "Relief Camp", "icon": FontAwesomeIcons.tent},
     {"type": "Safe Space", "icon": FontAwesomeIcons.home},
     {"type": "Supplies", "icon": FontAwesomeIcons.boxOpen},
   ];
  
     List<Map<String, dynamic>> filtersGiveHelp = [
       {"type": "Volunteer", "icon": FontAwesomeIcons.handsHelping},
-      {"type": "Donate", "icon": FontAwesomeIcons.donate},
+      {"type": "Donate", "icon": FontAwesomeIcons.gift},
       {"type": "Shelter", "icon": FontAwesomeIcons.home},
       {"type": "Food", "icon": FontAwesomeIcons.utensils},
     ];
   
   String selectedFilter = '';
 
-  Widget _buildFilterBar() {
-    List<Map<String, dynamic>> currentFilters = isHelping ? filtersGiveHelp : filtersNeedHelp;
-
-
-    return Container(
-      height: 60,
-      padding: EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(  
-        scrollDirection: Axis.horizontal,
-        itemCount: currentFilters.length,
-        itemBuilder: (BuildContext context, int index) {
-          Map<String, dynamic> filter = currentFilters[index];
-          bool isSelected = filter['type'] == selectedFilter;
-
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 3),
-            child: FilterChip(
-              avatar: Icon(filter['icon'], color: isSelected ? Colors.white : Colors.grey),
-              label: Text(filter['type'], style: GoogleFonts.getFont(
-                'Lexend',
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                color: isSelected ? Colors.white : Colors.grey
-              )),
-              selected: isSelected,
-              onSelected: (bool value) {
-                setState(() {
-                  selectedFilter = value ? filter['type'] : '';
-                });
-              },
-              backgroundColor: Color.fromARGB(255, 227, 227, 227),
-              selectedColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
-              checkmarkColor: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
-                side: BorderSide(
-                  color: isSelected ? Colors.transparent : Colors.transparent,
-                ),
-              ),
-              shadowColor: Colors.black,
-              elevation: 3  ,
-
-              showCheckmark: false,
-            ),
-          );
-        },
-      ),
-    );
-  }
+ 
+  // <--------------------- Map Elements --------------------->
 
   @override
   void initState() {
@@ -114,6 +70,7 @@ class _HomeState extends State<Home> {
   }
   
   void _onMapCreated(GoogleMapController controller) {
+    _controllerCompleter.complete(controller);
     mapController = controller;
     mapController.setMapStyle(_mapStyle);
   }
@@ -123,132 +80,6 @@ class _HomeState extends State<Home> {
     setState(() {
       isHelping = prefs.getBool('mode') ?? false;
     });
-  }
-
-  // void _toggleMode(bool value) async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     isHelping = value;
-  //     print(isHelping);
-  //     prefs.setBool('mode', isHelping);
-  //   });
-  // }
-
-  Widget buildRecenterButton({
-    required GoogleMapController mapController,
-    required LatLng currentLocation,
-  }) {
-    return FloatingActionButton(
-      mini: false, // Set to true to create a smaller button
-      child: Icon(FontAwesomeIcons.streetView, color: Colors.black),
-      backgroundColor: Colors.white,
-      onPressed: () {
-        mapController.animateCamera(
-          CameraUpdate.newCameraPosition(
-            CameraPosition(
-              target: currentLocation,
-              zoom: 15.0, // Set the desired zoom level
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget buildFloatingActionButton({
-    required bool isHelping,
-    required LatLng currentLocation,
-    required String selectedFilter,
-  }) {
-    return FloatingActionButton(
-      
-      child: Icon(
-        isHelping ? FontAwesomeIcons.handHoldingHeart : FontAwesomeIcons.handsHelping,
-        color: Colors.white,
-      ),
-      
-      backgroundColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
-      onPressed: () {
-        // Placeholder function to print the details
-        print("\n\n\n\n\n\n\n\n\n");
-        print('Current Location: $currentLocation');
-        print('Selected Filter: $selectedFilter');
-        print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
-        
-      },
-    );
-  }
-
-  // Widget recenterBtn() {
-  //   return Positioned(
-  //     right: 20.0,
-  //     bottom: 90.0,
-  //     child: buildRecenterButton(
-  //       mapController: mapController, // Use the ! operator to tell Dart that you're sure it's not null here
-  //       currentLocation: currentLocation,
-  //     ),
-  //   );
-  // }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          locationLoaded ? GoogleMap(
-            myLocationEnabled: true,
-            myLocationButtonEnabled: false,
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: currentCameraPosition,
-            onCameraMove: (position) => currentCameraPosition = position,
-            zoomControlsEnabled: false,
-            // circles: _buildCircles(),
-            // markers: _buildMarkers(),
-          ) : Center(child: CircularProgressIndicator()),
-          Column(
-            children:[
-              _buildTopFloatingBar(),
-              _buildFilterBar(),
-            ]
-          ),
-          // Positioned(
-          //   right: 20.0,
-          //   bottom: 90.0,
-          //   child: buildRecenterButton(
-          //     mapController: mapController,
-          //     currentLocation: currentLocation,
-          //   ),
-          // ),
-          // Positioned(
-          //   right: 20.0,
-          //   bottom: 20.0,
-          //   child: buildFloatingActionButton(
-          //     isHelping: isHelping,
-          //     currentLocation: currentLocation,
-          //     selectedFilter: selectedFilter,
-          //   ),
-          // ),
-          // Positioned(
-          //   right: 20.0,
-          //   bottom: 20.0,
-          //   child: buildFloatingActionButton(
-          //     isHelping: isHelping,
-          //     currentLocation: currentLocation,
-          //     selectedFilter: selectedFilter,
-          //   ),
-          // ),
-          // recenterBtn(),
-          // Positioned(
-          //   right: 20.0,
-          //   bottom: 90.0,
-          //   child: buildRecenterButton(
-          //     mapController: mapController!, 
-          //     currentLocation: currentLocation,
-          //   ),
-          // ),
-        ],
-      ),
-    );
   }
 
 
@@ -274,12 +105,32 @@ class _HomeState extends State<Home> {
   //       ),
   //   };
   // }
+
+  //<--------------------- Misc --------------------->
+  // void _toggleMode(bool value) async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   setState(() {
+  //     isHelping = value;
+  //     print(isHelping);
+  //     prefs.setBool('mode', isHelping);
+  //   });
+  // }
+
+  // <--------------------- Actions --------------------->
+
+  dynamic actionButtonClickFn() {
+    // Placeholder function to print the details
+    print("-------------------------------------------------------------------------------------------------");
+    print('Current Location: $currentLocation');
+    print('Selected Filter: $selectedFilter');
+    print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
+    
+  }
   
-  
+  // <--------------------- UI --------------------->
 
   Widget _buildTopFloatingBar() {
-    return 
-    Container( 
+    return Container( 
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 20),
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10),
@@ -336,26 +187,151 @@ class _HomeState extends State<Home> {
                   // Add Styles if needed <-->
 
                 ),
-                // child:MaterialSegmentedControl<int>(
-                //   children: {
-                //     0: Text('Need Help'),
-                //     1: Text('Give Help'),
-                //   },
-                //   selectionIndex: isHelping ? 1 : 0,
-                //   borderColor: Colors.grey,
-                //   selectedColor: Colors.blue,
-                //   unselectedColor: Colors.white,
-                //   borderRadius: 20.0, // Rounded corners
-                //   onSegmentTapped: (int index) {
-                //     setState(() {
-                //       isHelping = index == 1;
-                //     });
-                //   },
-                // ),
               ),
             ],
           ),
         ),
+      ),
+    );
+  }
+
+ Widget _buildFilterBar() {
+    List<Map<String, dynamic>> currentFilters = isHelping ? filtersGiveHelp : filtersNeedHelp;
+    return Container(
+      height: 60,
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: ListView.builder(  
+        scrollDirection: Axis.horizontal,
+        itemCount: currentFilters.length,
+        itemBuilder: (BuildContext context, int index) {
+          Map<String, dynamic> filter = currentFilters[index];
+          bool isSelected = filter['type'] == selectedFilter;
+
+          return Container(
+            margin: EdgeInsets.symmetric(horizontal: 3),
+            child: FilterChip(
+              avatar: Icon(filter['icon'], color: isSelected ? Colors.white : Colors.grey),
+              label: Text(filter['type'], style: GoogleFonts.getFont(
+                'Lexend',
+                fontWeight: FontWeight.w500,
+                fontSize: 16,
+                color: isSelected ? Colors.white : Colors.grey
+              )),
+              selected: isSelected,
+              onSelected: (bool value) {
+                setState(() {
+                  selectedFilter = value ? filter['type'] : '';
+                });
+              },
+              backgroundColor: Color.fromARGB(255, 227, 227, 227),
+              selectedColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
+              checkmarkColor: Colors.transparent,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+                side: BorderSide(
+                  color: isSelected ? Colors.transparent : Colors.transparent,
+                ),
+              ),
+              shadowColor: Colors.black,
+              elevation: 3  ,
+
+              showCheckmark: false,
+            ),
+          );
+        },
+      ),
+    );
+  }
+  
+
+Widget recenterBtn(Completer<GoogleMapController> controllerCompleter, LatLng currentLocation) {
+    return FutureBuilder<GoogleMapController>(
+      future: controllerCompleter.future,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Positioned(
+            right: 20.0,
+            bottom: 90.0,
+            child: FloatingActionButton(
+              mini: false,
+              child: Icon(FontAwesomeIcons.streetView, color: Colors.black),
+              backgroundColor: Colors.white,
+              onPressed: () {
+                snapshot.data!.animateCamera(
+                  CameraUpdate.newCameraPosition(
+                    CameraPosition(
+                      target: currentLocation,
+                      zoom: 15.0,
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        } else {
+          return Container();
+        }
+      },
+    );
+  }
+
+  Widget actionBtn(isHelping, currentLocation, selectedFilter) {
+    return Positioned(
+      right: 20.0,
+      bottom: 20.0,
+      child: buildFloatingActionButton(
+        isHelping: isHelping,
+        currentLocation: currentLocation,
+        selectedFilter: selectedFilter,
+      ),
+    );
+  }
+
+  Widget buildFloatingActionButton({
+    required bool isHelping,
+    required LatLng currentLocation,
+    required String selectedFilter,
+  }) {
+    return FloatingActionButton(
+      
+      child: Icon(
+        isHelping ? FontAwesomeIcons.handHoldingHeart : FontAwesomeIcons.handsHelping,
+        color: Colors.white,
+      ),
+      
+      backgroundColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
+      onPressed: actionButtonClickFn,
+    );
+  }
+
+
+  // <--------------------- Build --------------------->
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          locationLoaded ? GoogleMap(
+            myLocationEnabled: true,
+            myLocationButtonEnabled: false,
+            compassEnabled: false,
+            onMapCreated: _onMapCreated,
+            initialCameraPosition: currentCameraPosition,
+            onCameraMove: (position) => currentCameraPosition = position,
+            zoomControlsEnabled: false,
+            // circles: _buildCircles(),
+            // markers: _buildMarkers(),
+          ) : Center(child: CircularProgressIndicator()),
+          Column(
+            children:[
+              _buildTopFloatingBar(),
+              _buildFilterBar(),
+            ]
+          ),
+          
+          recenterBtn(_controllerCompleter, currentLocation),
+          actionBtn(isHelping, currentLocation, selectedFilter),
+        ],
       ),
     );
   }
