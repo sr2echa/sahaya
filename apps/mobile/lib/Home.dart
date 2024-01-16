@@ -46,7 +46,7 @@ class _HomeState extends State<Home> {
     return Container(
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(
+      child: ListView.builder(  
         scrollDirection: Axis.horizontal,
         itemCount: currentFilters.length,
         itemBuilder: (BuildContext context, int index) {
@@ -179,6 +179,7 @@ class _HomeState extends State<Home> {
   //       ),
   //   };
   // }
+  
   
 
   Widget _buildTopFloatingBar() {
