@@ -131,6 +131,30 @@ class _HomeState extends State<Home> {
   //   });
   // }
 
+  Widget buildFloatingActionButton({
+    required bool isHelping,
+    required LatLng currentLocation,
+    required String selectedFilter,
+  }) {
+    return FloatingActionButton(
+      
+      child: Icon(
+        isHelping ? FontAwesomeIcons.handHoldingHeart : FontAwesomeIcons.handsHelping,
+        color: Colors.white,
+      ),
+      
+      backgroundColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
+      onPressed: () {
+        // Placeholder function to print the details
+        print("\n\n\n\n\n\n\n\n\n");
+        print('Current Location: $currentLocation');
+        print('Selected Filter: $selectedFilter');
+        print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
+        
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,7 +162,7 @@ class _HomeState extends State<Home> {
         children: [
           locationLoaded ? GoogleMap(
             myLocationEnabled: true,
-            myLocationButtonEnabled: true,
+            myLocationButtonEnabled: false,
             onMapCreated: _onMapCreated,
             initialCameraPosition: currentCameraPosition,
             onCameraMove: (position) => currentCameraPosition = position,
@@ -152,8 +176,47 @@ class _HomeState extends State<Home> {
               _buildFilterBar(),
             ]
           ),
+          Positioned(
+            right: 20.0,
+            bottom: 90.0,
+            child: buildRecenterButton(
+              mapController: mapController,
+              currentLocation: currentLocation,
+            ),
+          ),
+          Positioned(
+            right: 20.0,
+            bottom: 20.0,
+            child: buildFloatingActionButton(
+              isHelping: isHelping,
+              currentLocation: currentLocation,
+              selectedFilter: selectedFilter,
+            ),
+          ),
         ],
       ),
+    );
+  }
+
+
+  Widget buildRecenterButton({
+    required GoogleMapController mapController,
+    required LatLng currentLocation,
+  }) {
+    return FloatingActionButton(
+      mini: false, // Set to true to create a smaller button
+      child: Icon(FontAwesomeIcons.streetView, color: Colors.black),
+      backgroundColor: Colors.white,
+      onPressed: () {
+        mapController.animateCamera(
+          CameraUpdate.newCameraPosition(
+            CameraPosition(
+              target: currentLocation,
+              zoom: 15.0, // Set the desired zoom level
+            ),
+          ),
+        );
+      },
     );
   }
 
