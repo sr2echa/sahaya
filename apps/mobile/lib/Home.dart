@@ -228,15 +228,15 @@ class _HomeState extends State<Home> {
           //     selectedFilter: selectedFilter,
           //   ),
           // ),
-          Positioned(
-            right: 20.0,
-            bottom: 20.0,
-            child: buildFloatingActionButton(
-              isHelping: isHelping,
-              currentLocation: currentLocation,
-              selectedFilter: selectedFilter,
-            ),
-          ),
+          // Positioned(
+          //   right: 20.0,
+          //   bottom: 20.0,
+          //   child: buildFloatingActionButton(
+          //     isHelping: isHelping,
+          //     currentLocation: currentLocation,
+          //     selectedFilter: selectedFilter,
+          //   ),
+          // ),
           // recenterBtn(),
           // Positioned(
           //   right: 20.0,
