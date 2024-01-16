@@ -40,7 +40,8 @@ flutter:
     - assets/maps/
 
 flutter_launcher_icons:
-  android: true
+  android: 'launcher_icon'
   ios: true
   adaptive_icon_background: "#ffffff" 
+  adaptive_icon_foreground: "assets/icon/icon.png"
   image_path: "assets/icon/icon.png"
