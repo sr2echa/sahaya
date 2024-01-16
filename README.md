@@ -4,9 +4,9 @@
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
 
 <samp>
-<summary> <h3>What did we find after a research conducted with over <b>1.1k participants</b> ?</h3> </summary>
+<summary> <h2>🔮 What did we find after a research conducted with over <ins>1.1k participants</ins> ?</h2> </summary>
 
-We conducted an initial survey involving <b>1100+ responses</b> over <b>11 countries</b> asking their inputs and experiences. Here is an excerpt of the results:
+We conducted an initial survey involving <kbd>1100+ responses</kbd> over <code>11 countries</code> asking their inputs and experiences. Here is an excerpt of the results:
 
 <details>
 <summary> <h4> 👈 These were the responses </h4> </summary>
@@ -29,11 +29,11 @@ We conducted an initial survey involving <b>1100+ responses</b> over <b>11 count
 </table>
 </details>
 
-- On an average, <b> 84+ % </b> of the people were directly affected by some climate crisis. <br> 
-- A vast section of people have faced difficulty in getting essentials during a crisis. <br>
-- The public opinion is that community support is the most effective way to get help during a crisis. <br>
-- Majority of the people are willing to help others during a crisis. <br>
-- People understand the importance of climate change and individual contribution to climate action. <br>
+> - On an average, <b> 84+ % </b> of the people were directly affected by some climate crisis. <br> 
+> - A vast section of people have faced difficulty in getting essentials during a crisis. <br>
+> - The public opinion is that community support is the most effective way to get help during a crisis. <br>
+> - Majority of the people are willing to help others during a crisis. <br>
+> - People understand the importance of climate change and individual contribution to climate action. <br>
 
 <h4> We also continued the survey and asked the participants to give their inputs on the app. </h4>
 
@@ -48,8 +48,8 @@ We conducted an initial survey involving <b>1100+ responses</b> over <b>11 count
 </table>
 </details>
 
-- People highly believe that the app will be useful to combat crisis. <br>
-- People are willing to use the app to help others and to seek help. <br>
+> - People highly believe that the app will be useful to combat crisis. <br>
+> - People are willing to use the app to help others and to seek help. <br>
 <br>
 <img src="https://github.com/sr2echa/sahaya/assets/65058816/ae8135c2-7eba-44a9-a98d-f0202426fbda" width=600 align=center>
 
@@ -61,6 +61,14 @@ We conducted an initial survey involving <b>1100+ responses</b> over <b>11 count
   You too can fill in the form [here](https://forms.gle/M3ubWpjqPQrtxnkh6)! 
   
 </h3>
+</samp>
+
+
+# ✨ Features
+- Resource mapping
+- **Will work even when Offline!** >>>  _yea you heard us right ;)_
+- Predicted weather warnings and precautions <br><br>
+and much more...  🤫
 
 # 📱 Preview
 
@@ -77,7 +85,7 @@ We conducted an initial survey involving <b>1100+ responses</b> over <b>11 count
   </tr>
 </table>
 
-</samp>
+
 
 
 <details>
@@ -135,10 +143,16 @@ Follow these steps to set up and run Sahaya:
 
 ![image](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
 
---- 
-<h6> 
+# 🦄 Acknoledgements
+### We are highly thankful to all those who were part of our product research and filled the form.
+> [!NOTE]
+> <samp> We got more feedback, ideas & suggestions that we are actively developing! </samp>
 
-📜 Licensed under [MIT License](./LICENSE) <br><br>
+--- 
+<h6> <samp>
+
+📜 Licensed under [MIT License](./LICENSE) <br>
  Made for GDSC Solution Challenge 2024 with 💖
 
+</samp>
 </h6>
