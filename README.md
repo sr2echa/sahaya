@@ -172,7 +172,7 @@ Follow these steps to set up and run Sahaya:
 
 ![](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
 
-# 🦄 Acknoledgements
+# 🦄 Acknowledgments
 #### We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing!
 
 --- 
