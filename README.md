@@ -1,7 +1,22 @@
-![image](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
+![](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
 
 # <samp>Sahaya : Bridging Help in Crisis</samp>
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
+
+<samp>
+<details>
+  <summary> <h3> 
+    
+  The demographics of disasters in the **World** and in **India** 
+    
+  </h3> </summary>
+
+  
+  ![](https://github.com/sr2echa/sahaya/assets/65058816/be68c167-4163-4c50-a568-fb1995bb1dd6)
+
+
+</details>
+</samp>
 
 <samp>
 <summary> <h2>🔮 What did we find after a research conducted with over <ins>1.1k participants</ins> ?</h2> </summary>
@@ -63,6 +78,17 @@ We conducted an initial survey involving <kbd>1100+ responses</kbd> over <code>1
 </h3>
 </samp>
 
+<samp>
+<details>
+  <summary><h2> How Sahaya Will Work (Overview) </h2></summary>
+
+
+  ![](https://github.com/sr2echa/sahaya/assets/65058816/a3a61616-6047-4973-97b0-da7f81a3c8aa)
+
+
+</details>
+</samp>
+
 
 # ✨ Features
 - Resource mapping
@@ -99,9 +125,9 @@ and much more...  🤫
 
 Ensure that you have the following tools and resources installed before using Sahaya:
 
-1. **Flutter** 
+1. **Flutter SDK** 
 2. **Android Studio** 
-3. **Python** 
+3. **Python 3.6+** 
 4. **Gemini API** .
 5. **Google Cloud Platform (GCP) Account** 
 6. **Firebase** 
@@ -120,12 +146,12 @@ Follow these steps to set up and run Sahaya:
 
     cd sahaya
 
-#### 3. Check Flutter dependencies:
+#### 3. Install Flutter dependencies:
 
     flutter pub get
 
 #### 4. Update `.env`
-#### 5. Open a `simulator`
+#### 5. Open a `emulator`
 
 #### 6. Run the application:
 
@@ -141,12 +167,10 @@ Follow these steps to set up and run Sahaya:
 # Tech Stack
 </samp>
 
-![image](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
+![](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
 
 # 🦄 Acknoledgements
-### We are highly thankful to all those who were part of our product research and filled the form.
-> [!NOTE]
-> <samp> We got more feedback, ideas & suggestions that we are actively developing! </samp>
+### We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing!
 
 --- 
 <h6> <samp>
