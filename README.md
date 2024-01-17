@@ -1,6 +1,5 @@
 >[!NOTE]
 > Any Line containing a ` ▶ ` in the start is a clickable **`Dropdown menu`**. Click on the line to expand the cascaded content
-<br>
 
 ![](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
 
@@ -174,7 +173,7 @@ Follow these steps to set up and run Sahaya:
 ![](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
 
 # 🦄 Acknoledgements
-### We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing!
+#### We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing!
 
 --- 
 <h6> <samp>
