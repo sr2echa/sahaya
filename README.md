@@ -1,3 +1,7 @@
+>[!NOTE]
+> Any Line containing a ` ▶ ` in the start is a clickable **`Dropdown menu`**. Click on the line to expand the cascaded content
+<br>
+
 ![](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
 
 # <samp>Sahaya : Bridging Help in Crisis</samp>
