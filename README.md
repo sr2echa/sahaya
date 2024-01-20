@@ -1,3 +1,14 @@
+<samp><h3 align = center>
+
+Trailer for sahaya just got released! you can view it on <br>
+<img src="https://raw.githubusercontent.com/github/explore/d744245de144b89f3e3462949e08bfc91eda7fcf/topics/youtube/youtube.png" width=15>
+[YouTube](https://youtu.be/FVuFdDk8XGk) 
+
+</h3></samp>
+
+![---](https://github.com/sr2echa/sahaya/assets/65058816/f3d34e7c-34f4-43ab-b783-9eb0b27bc188)
+<br>
+
 >[!NOTE]
 > Any Line containing a ` ▶ ` in the start is a clickable **`Dropdown menu`**. Click on the line to expand the cascaded content
 
