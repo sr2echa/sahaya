@@ -7,8 +7,8 @@ import os
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate(r".\firebase.json")
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(r"firebase.json")
+# firebase_admin.initialize_app(cred)
 
 
 load_dotenv()
@@ -17,6 +17,7 @@ WEATHER_API=os.getenv('WEATHERAPI_API_KEY')
 GEMINI_API=os.getenv('GEMINI_API_KEY')
 
 app = Flask(__name__)
+
 
 @app.route('/', methods=['GET'])
 def index():
@@ -36,13 +37,14 @@ def gemini():
     Warn only if the calamity is <24hrs ahead.
     The response should be of a json of this schema 
     'Color': (Red or Orange or yellow - based on siverity of the climate action.) 1 word (red/orange/yellow)
+    'weather': (The weather at the moment) 1 word (sunny/cloudy/rainy) in the exact name of font awesome icon pack (https://fontawesome.com/v5.15/icons?d=gallery&p=2&q=weather&m=free) using the data from json
     'Alert': (The warning about the predicted time and calamity) 1-2 lines [short and crisp & Give the nearest first occurence of such change in weather] the data from the json
     'Precautions': (Few precautions to take - based on the siverity (color) of the calamity) In points format. Tailor it to the particular city based on the input data given [A list of strings - each point is a string element in the list]
-    'aqi' : (Based on the air quality from the json file)
      Incase, at current, a calamity is going on, (like its raining, etc), Give a response in the above format with a Green 'color' and Alert should consist of the Time the disaster will decrese or will get back to normal. Give the nearest first occurence.
     Also, if the weaher is normal, give the response with color 'white' and the rest of the response. Give recomendations and alert for airQuality if the color is'white' (the weather is not bad - cloudy, sunny, etc). If the airQuality is good and has no harm, """
     response = model.generate_content(prompt)
     print(response.text)
     return jsonify(response.text)
 
-app.run(port=5000, debug=True)
+if __name__ == '__main__':
+    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
