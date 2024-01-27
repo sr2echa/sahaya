@@ -35,9 +35,11 @@ flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/
     - assets/icon/
     - assets/background/
     - assets/maps/
+    - assets/maps/markers/
 
 flutter_launcher_icons:
   android: 'launcher_icon'

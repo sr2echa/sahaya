@@ -7,8 +7,8 @@ import os
 import firebase_admin
 from firebase_admin import credentials
 
-# cred = credentials.Certificate(r"firebase.json")
-# firebase_admin.initialize_app(cred)
+cred = credentials.Certificate(r".\firebase.json")
+firebase_admin.initialize_app(cred)
 
 
 load_dotenv()
@@ -46,5 +46,4 @@ def gemini():
     print(response.text)
     return jsonify(response.text)
 
-if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+app.run(port=5000, debug=True)
