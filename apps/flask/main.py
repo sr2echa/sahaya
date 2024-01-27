@@ -7,8 +7,8 @@ import os
 import firebase_admin
 from firebase_admin import credentials
 
-cred = credentials.Certificate(r".\firebase.json")
-firebase_admin.initialize_app(cred)
+# cred = credentials.Certificate(r".\firebase.json")
+# firebase_admin.initialize_app(cred)
 
 
 load_dotenv()
