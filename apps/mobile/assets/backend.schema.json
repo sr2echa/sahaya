@@ -3,17 +3,26 @@
         {
             "type" : "hospital",
             "location" : {
-                "lat" : 37.7749295,
-                "lng" : -122.4194155
+                "lat" : 12.6612733,
+                "lng" : 80.1792617
             },
             "phone" : "415-555-5555",
             "help" : ["medical"]
         },
         {
-            "type" : "relief camp",
+            "type" : "hospital",
             "location" : {
-                "lat" : 37.7749295,
-                "lng" : -122.4194155
+                "lat" : 12.6612733,
+                "lng" : 80.1792617
+            },
+            "phone" : "415-555-5555",
+            "help" : ["medical"]
+        },
+        {
+            "type" : "reliefCamp",
+            "location" : {
+                "lat" : 12.6612733,
+                "lng" : 80.1742617
             },
             "phone" : "415-555-5555",
             "help" : ["food", "shelter"]
@@ -21,17 +30,17 @@
         {
             "type" : "supplies",
             "location" : {
-                "lat" : 37.7749295,
-                "lng" : -122.4194155
+                "lat" : 12.7749295,
+                "lng" : 80.4194155
             },
             "phone" : "415-555-5555",
             "help" : ["food", "water", "clothing"]
         },
         {
-            "type" : "shelter",
+            "type" : "safeSpace",
             "location" : {
-                "lat" : 37.7749295,
-                "lng" : -122.4194155
+                "lat" : 12.6949295,
+                "lng" : 80.1744155
             },
             "phone" : "415-555-5555",
             "help" : ["shelter"]
@@ -42,7 +51,16 @@
         {    "type" : "volunteer",
             "location" : {
                 "lat" : 37.7749295,
-                "lng" : -122.4194155
+                "lng" : 79.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["food"]
+        },
+        {
+            "type" : "food",
+            "location" : {
+                "lat" : 12.7749295,
+                "lng" : 80.4194155
             },
             "phone" : "415-555-5555",
             "help" : ["food"]

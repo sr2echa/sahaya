@@ -22,6 +22,7 @@ dependencies:
   geolocator: 
   custom_sliding_segmented_control:
   material_segmented_control:
+  flutter_svg:
 
 dev_dependencies:
   flutter_test:
@@ -40,6 +41,7 @@ flutter:
     - assets/background/
     - assets/maps/
     - assets/maps/markers/
+    - assets/maps/markers/hospital.png
 
 flutter_launcher_icons:
   android: 'launcher_icon'
