@@ -97,7 +97,6 @@ class _HomeState extends State<Home> {
 
         onTap: () {
           _showLocationDetails(context, item);
-          print('---------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n');
         }
       );
 
@@ -128,8 +127,7 @@ class _HomeState extends State<Home> {
 
         onTap: () {
           _showLocationDetails(context, item);
-          print('---------------------------------------------------------------------------------------------------\n-----------------\n\n\n\n\n\n');
-        }
+          }
       );
 
     switch (item['type']) {
@@ -380,14 +378,94 @@ class _HomeState extends State<Home> {
 
   // <--------------------- Actions --------------------->
 
-  dynamic actionButtonClickFn() {
-    // Placeholder function to print the details
-    print("-------------------------------------------------------------------------------------------------");
-    print('Current Location: $currentLocation');
-    print('Selected Filter: $selectedFilter');
-    print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
+  // dynamic actionButtonClickFn() {
+  //   // Placeholder function to print the details
+  //   print("-------------------------------------------------------------------------------------------------");
+  //   print('Current Location: $currentLocation');
+  //   print('Selected Filter: $selectedFilter');
+  //   print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
     
-  }
+  // }
+
+  void actionButtonClickFn() async {
+  final prefs = await SharedPreferences.getInstance();
+  String phoneNumber = prefs.getString('user_phone') ?? 'No phone number set';
+
+  List<String> helpOptions = isHelping
+      ? ['Volunteer', 'Donate', 'Provide Shelter', 'Offer Food']
+      : ['Medical', 'Shelter', 'Food', 'Clothing', 'Other'];
+
+  List<String> selectedHelp = [];
+
+  showModalBottomSheet(
+    context: context,
+    isScrollControlled: true,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+    ),
+    builder: (BuildContext context) {
+      return StatefulBuilder(
+        builder: (BuildContext context, StateSetter setModalState) {
+          return Padding(
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  isHelping ? 'I can provide' : 'I need',
+                  style: GoogleFonts.lexend(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                ),
+                Divider(),
+                ...helpOptions.map((option) => CheckboxListTile(
+                      title: Text(option, style: GoogleFonts.lexend()),
+                      value: selectedHelp.contains(option),
+                      onChanged: (bool? value) {
+                        setModalState(() {
+                          if (value == true) {
+                            selectedHelp.add(option);
+                          } else {
+                            selectedHelp.remove(option);
+                          }
+                        });
+                      },
+                    )),
+                Center(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      primary: isHelping ? Colors.blue : Colors.red,
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: Text(
+                      'Submit',
+                      style: GoogleFonts.lexend(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: () {
+                      // Here you can handle the submission to backend or shared preferences
+                      print('Action Button Pressed with the following selections:');
+                      print('Phone Number: $phoneNumber');
+                      print('Current Location: $currentLocation');
+                      print('Selected Help Options: $selectedHelp');
+                      Navigator.pop(context); // To close the modal bottom sheet
+                    },
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    },
+  );
+}
   
   // <--------------------- UI --------------------->
 
