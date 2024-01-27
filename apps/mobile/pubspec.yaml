@@ -38,6 +38,7 @@ flutter:
     - assets/icon/
     - assets/background/
     - assets/maps/
+    - assets/maps/markers/
 
 flutter_launcher_icons:
   android: 'launcher_icon'

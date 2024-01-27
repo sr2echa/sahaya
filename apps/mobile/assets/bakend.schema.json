@@ -1,0 +1,51 @@
+{
+    "need" : [
+        {
+            "type" : "hospital",
+            "location" : {
+                "lat" : 37.7749295,
+                "lng" : -122.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["medical"]
+        },
+        {
+            "type" : "relief camp",
+            "location" : {
+                "lat" : 37.7749295,
+                "lng" : -122.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["food", "shelter"]
+        },
+        {
+            "type" : "supplies",
+            "location" : {
+                "lat" : 37.7749295,
+                "lng" : -122.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["food", "water", "clothing"]
+        },
+        {
+            "type" : "shelter",
+            "location" : {
+                "lat" : 37.7749295,
+                "lng" : -122.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["shelter"]
+        }
+    ],
+
+    "give": [
+        {    "type" : "volunteer",
+            "location" : {
+                "lat" : 37.7749295,
+                "lng" : -122.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["food"]
+        }
+    ]
+}
