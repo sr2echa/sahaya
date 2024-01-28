@@ -200,7 +200,8 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: Text(
                         'Distance: $distanceDisplay',
-                        style: GoogleFonts.lexend(
+                        style: GoogleFonts.getFont(
+                          "Lexend",
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black,
@@ -214,7 +215,10 @@ class _HomeState extends State<Home> {
                       icon: Icon(Icons.directions, color: Colors.blue),
                       label: Text(
                         'Route',
-                        style: GoogleFonts.lexend(color: Colors.blue),
+                        style: GoogleFonts.getFont(
+                          "Lexend",
+                          color: Colors.blue
+                        ),
                       ),
                     ),
                   ],
@@ -252,7 +256,8 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 22),
                 Text(
                   'Available Assistance:',
-                  style: GoogleFonts.lexend(
+                  style: GoogleFonts.getFont(
+                    "Lexend",
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black,
@@ -263,7 +268,8 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       '• $helpItem',
-                      style: GoogleFonts.lexend(
+                      style: GoogleFonts.getFont(
+                        "Lexend",
                         fontSize: 16,
                         color: Colors.black,
                       ),
@@ -387,15 +393,127 @@ class _HomeState extends State<Home> {
     
   // }
 
-  void actionButtonClickFn() async {
+  // -----------------------------------------------------------------------------------------------------------------------------------------------
+  // void actionButtonClickFn() async {
+  //   final prefs = await SharedPreferences.getInstance();
+  //   String phoneNumber = prefs.getString('phoneNumber') ?? 'No phone number set';
+
+  //   Map<String, IconData> helpIcons = isHelping
+  //       ? {
+  //           'Volunteer': Icons.volunteer_activism,
+  //           'Donate': Icons.monetization_on,
+  //           'Provide Shelter': Icons.home,
+  //           'Offer Food': Icons.food_bank,
+  //         }
+  //       : {
+  //           'Medical': Icons.medical_services,
+  //           'Shelter': Icons.house,
+  //           'Food': Icons.fastfood,
+  //           'Clothing': Icons.checkroom,
+  //           'Other': Icons.help_outline,
+  //         };
+
+  //   List<String> selectedHelp = [];
+
+  //   showModalBottomSheet(
+  //     context: context,
+  //     isScrollControlled: true,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+  //     ),
+  //     builder: (BuildContext context) {
+  //       return StatefulBuilder(
+  //         builder: (BuildContext context, StateSetter setModalState) {
+  //           return Padding(
+  //             padding: EdgeInsets.all(40),
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: <Widget>[
+  //                 Text(
+  //                   isHelping ? ' I can provide' : ' I need',
+  //                   style: GoogleFonts.getFont(
+  //                     "Lexend",
+  //                     fontWeight: FontWeight.bold,
+  //                     fontSize: 20,
+  //                   ),
+  //                 ),
+  //                 Divider(),
+  //                 SizedBox(height: 10),
+  //                 ...helpIcons.keys.map((option) => CheckboxListTile(
+  //                       title: Text(option, style: GoogleFonts.getFont(
+  //                         "Lexend",
+  //                       )),
+  //                       value: selectedHelp.contains(option),
+  //                       onChanged: (bool? value) {
+  //                         setModalState(() {
+  //                           if (value == true) {
+  //                             selectedHelp.add(option);
+  //                           } else {
+  //                             selectedHelp.remove(option);
+  //                           }
+  //                         });
+  //                       },
+  //                       secondary: Icon(helpIcons[option]),
+  //                     )),
+  //                 SizedBox(height: 20),
+  //                 Center(
+  //                   child: ElevatedButton(
+  //                     style: ElevatedButton.styleFrom(
+  //                       shape: StadiumBorder(),
+  //                       primary: isHelping ? Colors.blue : Colors.red,
+  //                       padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+  //                     ),
+  //                     child: Text(
+  //                       'Submit',
+  //                       style: GoogleFonts.getFont(
+  //                         "Lexend",
+  //                         fontWeight: FontWeight.bold,
+  //                         fontSize: 18,
+  //                         color: Colors.white,
+  //                       ),
+  //                     ),
+  //                     onPressed: () {
+  //                       // Here you can handle the submission to backend or shared preferences
+  //                       print('Action Button Pressed with the following selections:');
+  //                       print('Phone Number: $phoneNumber');
+  //                       print('Current Location: $currentLocation');
+  //                       print('Selected Help Options: $selectedHelp');
+  //                       Navigator.pop(context); // To close the modal bottom sheet
+  //                     },
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           );
+  //         },
+  //       );
+  //     },
+  //   );
+  // }
+
+
+void actionButtonClickFn() async {
   final prefs = await SharedPreferences.getInstance();
-  String phoneNumber = prefs.getString('user_phone') ?? 'No phone number set';
+  String phoneNumber = prefs.getString('phoneNumber') ?? 'No phone number set';
 
-  List<String> helpOptions = isHelping
-      ? ['Volunteer', 'Donate', 'Provide Shelter', 'Offer Food']
-      : ['Medical', 'Shelter', 'Food', 'Clothing', 'Other'];
+  Map<String, IconData> helpIcons = {
+    'Volunteer': Icons.volunteer_activism,
+    'Donate': Icons.monetization_on,
+    'Provide Shelter': Icons.house,
+    'Offer Food': Icons.food_bank,
+    'Medical': Icons.medical_services,
+    'Shelter': Icons.house,
+    'Food': Icons.fastfood,
+    'Clothing': Icons.checkroom,
+    'Other': Icons.help_outline,
+  };
 
-  List<String> selectedHelp = [];
+  Map<String, bool> helpOptions = Map.fromIterable(
+    isHelping ? helpIcons.keys.take(4) : helpIcons.keys.skip(4),
+    key: (item) => item as String,
+    value: (item) => false,
+  );
 
   showModalBottomSheet(
     context: context,
@@ -404,68 +522,112 @@ class _HomeState extends State<Home> {
       borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
     ),
     builder: (BuildContext context) {
-      return StatefulBuilder(
-        builder: (BuildContext context, StateSetter setModalState) {
-          return Padding(
-            padding: EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  isHelping ? 'I can provide' : 'I need',
-                  style: GoogleFonts.lexend(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                  ),
-                ),
-                Divider(),
-                ...helpOptions.map((option) => CheckboxListTile(
-                      title: Text(option, style: GoogleFonts.lexend()),
-                      value: selectedHelp.contains(option),
-                      onChanged: (bool? value) {
-                        setModalState(() {
-                          if (value == true) {
-                            selectedHelp.add(option);
-                          } else {
-                            selectedHelp.remove(option);
-                          }
-                        });
-                      },
-                    )),
-                Center(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      primary: isHelping ? Colors.blue : Colors.red,
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                    ),
-                    child: Text(
-                      'Submit',
-                      style: GoogleFonts.lexend(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: Colors.white,
+      return DraggableScrollableSheet(
+        expand: false,
+        builder: (_, controller) {
+          return StatefulBuilder(
+            builder: (BuildContext context, StateSetter setModalState) {
+              return Container(
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: ListView(
+                  controller: controller,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 40),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text(
+                            isHelping ? ' I can provide' : ' I need',
+                            style: GoogleFonts.lexend(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                          Divider(),
+                          ...helpOptions.keys.map((option) {
+                            final isSelected = helpOptions[option]!;
+                            return InkWell(
+                              onTap: () {
+                                setModalState(() {
+                                  helpOptions[option] = !isSelected;
+                                });
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(top: 10),
+                                padding: EdgeInsets.fromLTRB(20, 15, 10, 15),
+                                decoration: BoxDecoration(
+                                  border: isSelected
+                                      ? Border.all(color: Theme.of(context).primaryColor, width: 2)
+                                      : Border.all(color: Colors.grey[300]!),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Icon(helpIcons[option], color: Colors.grey[600]),
+                                    SizedBox(width: 15),
+                                    Expanded(
+                                      child: Text(
+                                        option,
+                                        style: GoogleFonts.lexend(
+                                          fontWeight: FontWeight.bold,
+                                          color: isSelected ? Theme.of(context).primaryColor : Colors.black,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                    if (isSelected)
+                                      Icon(Icons.check, color: Theme.of(context).primaryColor),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }),
+                          SizedBox(height: 20),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              shape: StadiumBorder(),
+                              primary: isHelping ? Colors.blue : Colors.red,
+                              padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                            ),
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.lexend(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: Colors.white,
+                              ),
+                            ),
+                            onPressed: () {
+                              List<String> selectedHelp = helpOptions.entries
+                                  .where((entry) => entry.value)
+                                  .map((entry) => entry.key)
+                                  .toList();
+                              // Handle the submission logic here
+                              print('Phone Number: $phoneNumber');
+                              print('Selected Help Options: $selectedHelp');
+                              Navigator.pop(context); // Close the modal bottom sheet
+                            },
+                          ),
+                        ],
                       ),
                     ),
-                    onPressed: () {
-                      // Here you can handle the submission to backend or shared preferences
-                      print('Action Button Pressed with the following selections:');
-                      print('Phone Number: $phoneNumber');
-                      print('Current Location: $currentLocation');
-                      print('Selected Help Options: $selectedHelp');
-                      Navigator.pop(context); // To close the modal bottom sheet
-                    },
-                  ),
+                  ],
                 ),
-              ],
-            ),
+              );
+            },
           );
         },
+        initialChildSize: 0.55, // Adjust the initial height of the modal
+        minChildSize: 0.1,     // Adjust the minimum height the modal can shrink to
+        maxChildSize: 0.6,     // Adjust the maximum height the modal can grow to
       );
     },
   );
 }
+
+
   
   // <--------------------- UI --------------------->
 
