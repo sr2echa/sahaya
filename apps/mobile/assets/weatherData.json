@@ -1,0 +1,13 @@
+{
+    "Color": "red",
+    "weather": "Rainy",
+    "Alert": null,
+    "Precautions": [
+     "Stay hydrated by drinking plenty of fluids.",
+     "Avoid strenuous outdoor activities during the hottest part of the day.",
+     "Wear loose, lightweight clothing made from natural fibers.",
+     "Take precautions to protect your skin from the sun, such as wearing a hat, sunglasses, and sunscreen.",
+     "Check on elderly neighbors and relatives to make sure they are staying cool and hydrated.",
+     "Keep your pets indoors during the hottest part of the day."
+    ]
+   }
