@@ -69,7 +69,6 @@ def gemini():
     Also, if the weaher is normal, give the response with color 'white' and the rest of the response. Give recomendations and alert for airQuality if the color is'white' (the weather is not bad - cloudy, sunny, etc). If the airQuality is good and has no harm, """
     response = model.generate_content(prompt)
     print(response.text)
-    db.collection('trial').add({'city':city,'response':response.text})
     return jsonify(response.text)
 
 @app.route('/api/debug/backend/',methods = ['GET'])
