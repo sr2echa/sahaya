@@ -77,7 +77,7 @@ class _MyAppState extends State<MyApp> {
           index: _selectedIndex,
           children: [
             widget.phoneNumber == null ? GetPhoneNumber() : Home(),
-            widget.permissionsGranted ? Weather() : GetPermissions(),
+            widget.permissionsGranted ? WeatherScreen() : GetPermissions(),
             //<------------------ADD MORE OPTIONS AS NEEDED----------------->
           ],
         ),
