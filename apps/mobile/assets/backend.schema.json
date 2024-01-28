@@ -13,7 +13,7 @@
             "type" : "hospital",
             "location" : {
                 "lat" : 12.6612733,
-                "lng" : 80.1792617
+                "lng" : 80.1892617
             },
             "phone" : "415-555-5555",
             "help" : ["medical"]
@@ -21,7 +21,7 @@
         {
             "type" : "reliefCamp",
             "location" : {
-                "lat" : 12.6612733,
+                "lat" : 12.6712733,
                 "lng" : 80.1742617
             },
             "phone" : "415-555-5555",

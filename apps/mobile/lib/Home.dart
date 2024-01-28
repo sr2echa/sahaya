@@ -13,6 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:material_segmented_control/material_segmented_control.dart';
 
+import 'package:http/http.dart' as http;
+
 
 class Home extends StatefulWidget {
   @override
@@ -66,11 +68,29 @@ class _HomeState extends State<Home> {
     _mapStyle = await rootBundle.loadString('assets/maps/map_style.json');
   }
 
+  // Future<void> _loadJsonData() async {
+  //   String jsonString = await rootBundle.loadString('assets/backend.schema.json');
+  //   final jsonResponse = json.decode(jsonString);
+  //   _processJsonData(jsonResponse);
+  // }
+
   Future<void> _loadJsonData() async {
-    String jsonString = await rootBundle.loadString('assets/backend.schema.json');
-    final jsonResponse = json.decode(jsonString);
-    _processJsonData(jsonResponse);
+    final url = Uri.parse('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        // final jsonResponse = json.decode(response.body);
+        final jsonResponse = json.decode(response.body.replaceAll('\n', '').replaceAll('  ', ''));
+        print(jsonResponse);
+        _processJsonData(jsonResponse);
+      } else {
+        print('Failed to load data from the internet. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
   }
+
 
   void _processJsonData(Map<String, dynamic> data) async{
     
@@ -97,7 +117,6 @@ class _HomeState extends State<Home> {
 
         onTap: () {
           _showLocationDetails(context, item);
-          print('---------------------------------------------------------------------------------------------------\n\n\n\n\n\n\n\n\n\n\n\n');
         }
       );
 
@@ -128,8 +147,7 @@ class _HomeState extends State<Home> {
 
         onTap: () {
           _showLocationDetails(context, item);
-          print('---------------------------------------------------------------------------------------------------\n-----------------\n\n\n\n\n\n');
-        }
+          }
       );
 
     switch (item['type']) {
@@ -202,7 +220,8 @@ class _HomeState extends State<Home> {
                     Expanded(
                       child: Text(
                         'Distance: $distanceDisplay',
-                        style: GoogleFonts.lexend(
+                        style: GoogleFonts.getFont(
+                          "Lexend",
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                           color: Colors.black,
@@ -216,7 +235,10 @@ class _HomeState extends State<Home> {
                       icon: Icon(Icons.directions, color: Colors.blue),
                       label: Text(
                         'Route',
-                        style: GoogleFonts.lexend(color: Colors.blue),
+                        style: GoogleFonts.getFont(
+                          "Lexend",
+                          color: Colors.blue
+                        ),
                       ),
                     ),
                   ],
@@ -254,7 +276,8 @@ class _HomeState extends State<Home> {
                 SizedBox(height: 22),
                 Text(
                   'Available Assistance:',
-                  style: GoogleFonts.lexend(
+                  style: GoogleFonts.getFont(
+                    "Lexend",
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                     color: Colors.black,
@@ -265,7 +288,8 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       '• $helpItem',
-                      style: GoogleFonts.lexend(
+                      style: GoogleFonts.getFont(
+                        "Lexend",
                         fontSize: 16,
                         color: Colors.black,
                       ),
@@ -380,14 +404,152 @@ class _HomeState extends State<Home> {
 
   // <--------------------- Actions --------------------->
 
-  dynamic actionButtonClickFn() {
-    // Placeholder function to print the details
-    print("-------------------------------------------------------------------------------------------------");
-    print('Current Location: $currentLocation');
-    print('Selected Filter: $selectedFilter');
-    print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
+  // dynamic actionButtonClickFn() {
+  //   // Placeholder function to print the details
+  //   print("-------------------------------------------------------------------------------------------------");
+  //   print('Current Location: $currentLocation');
+  //   print('Selected Filter: $selectedFilter');
+  //   print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
     
+  // }
+
+  // -----------------------------------------------------------------------------------------------------------------------------------------------
+ 
+
+  void actionButtonClickFn() async {
+    final prefs = await SharedPreferences.getInstance();
+    String phoneNumber = prefs.getString('phoneNumber') ?? 'No phone number set';
+
+    Map<String, IconData> helpIcons = {
+      'Volunteer': Icons.volunteer_activism,
+      'Donate': Icons.monetization_on,
+      'Provide Shelter': Icons.house,
+      'Offer Food': Icons.food_bank,
+
+      'Medical': Icons.medical_services,
+      
+      'Shelter': Icons.house,
+      'Food': Icons.fastfood,
+      'Clothing': Icons.checkroom,
+
+      'Other': Icons.help_outline,
+    };
+
+    Map<String, bool> helpOptions = Map.fromIterable(
+      isHelping ? helpIcons.keys.take(4) : helpIcons.keys.skip(4),
+      key: (item) => item as String,
+      value: (item) => false,
+    );
+
+    bool isAnyOptionSelected() {
+      return helpOptions.containsValue(true);
+    }
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, StateSetter setModalState) {
+            return Padding(
+              padding: EdgeInsets.all(40),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  SizedBox(height: 10),
+                  Text(
+                    isHelping ? ' I can provide' : ' I need',
+                    style: GoogleFonts.getFont(
+                      "Lexend",
+                      fontWeight: FontWeight.bold,
+                      fontSize: 20,
+                    ),
+                  ),
+                  Divider(),
+                  ...helpOptions.keys.map((option) {
+                    final isSelected = helpOptions[option]!;
+                    return Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: InkWell(
+                        onTap: () {
+                          setModalState(() {
+                            helpOptions[option] = !isSelected;
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            border: isSelected
+                                ? Border.all(color: Theme.of(context).primaryColor, width: 2)
+                                : Border.all(color: Colors.grey[300]!),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(
+                            children: [
+                              SizedBox(width: 15), // Padding on the left side
+                              Icon(helpIcons[option], color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
+                              SizedBox(width: 15), // Space between the icon and text
+                              Expanded(
+                                child: Text(
+                                  option,
+                                  style: GoogleFonts.getFont(
+                                    "Lexend",
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? Theme.of(context).primaryColor : Colors.black,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                              if (isSelected)
+                                Icon(Icons.check, color: Theme.of(context).primaryColor),
+                              SizedBox(width: 15), // Padding on the right side
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      shape: StadiumBorder(),
+                      primary: isHelping ? Colors.blue : Colors.red,
+                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    ),
+                    child: Text(
+                      'Submit',
+                      style: GoogleFonts.getFont(
+                        "Lexend",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: isAnyOptionSelected() ? () {
+                      List<String> selectedHelp = helpOptions.entries
+                          .where((entry) => entry.value)
+                          .map((entry) => entry.key)
+                          .toList();
+                      // Handle the submission logic here
+                      print('Phone Number: $phoneNumber');
+                      print('Selected Help Options: $selectedHelp');
+                      Navigator.pop(context); // Close the modal bottom sheet
+                    } : null,
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
+
+
   
   // <--------------------- UI --------------------->
 

@@ -22,7 +22,9 @@ dependencies:
   geolocator: 
   custom_sliding_segmented_control:
   material_segmented_control:
+  modal_bottom_sheet:
   flutter_svg:
+  http:
 
 dev_dependencies:
   flutter_test:
