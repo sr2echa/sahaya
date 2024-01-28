@@ -13,6 +13,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:material_segmented_control/material_segmented_control.dart';
 
+import 'package:http/http.dart' as http;
+
 
 class Home extends StatefulWidget {
   @override
@@ -66,11 +68,29 @@ class _HomeState extends State<Home> {
     _mapStyle = await rootBundle.loadString('assets/maps/map_style.json');
   }
 
+  // Future<void> _loadJsonData() async {
+  //   String jsonString = await rootBundle.loadString('assets/backend.schema.json');
+  //   final jsonResponse = json.decode(jsonString);
+  //   _processJsonData(jsonResponse);
+  // }
+
   Future<void> _loadJsonData() async {
-    String jsonString = await rootBundle.loadString('assets/backend.schema.json');
-    final jsonResponse = json.decode(jsonString);
-    _processJsonData(jsonResponse);
+    final url = Uri.parse('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        // final jsonResponse = json.decode(response.body);
+        final jsonResponse = json.decode(response.body.replaceAll('\n', '').replaceAll('  ', ''));
+        print(jsonResponse);
+        _processJsonData(jsonResponse);
+      } else {
+        print('Failed to load data from the internet. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print("Error fetching data: $e");
+    }
   }
+
 
   void _processJsonData(Map<String, dynamic> data) async{
     
