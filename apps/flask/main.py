@@ -48,7 +48,7 @@ def gemini():
 
 @app.route('/api/debug/backend/',methods = ['GET'])
 def backend():
-    return jsonify(requests.get('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json').json)
+    return jsonify(requests.get('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json').text)
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
