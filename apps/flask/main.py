@@ -103,14 +103,20 @@ def add_details():
 
 
 
-@app.route('/api/v1/',methods = ['GET'])
+@app.route('/api/v1/', methods=['GET'])
 def get_data_from_firestore():
     doc_ref = db.collection('needs_and_gives')
     docs = doc_ref.stream()
     data_list = []
+    
     for doc in docs:
         data_list.append(doc.to_dict())
-    return jsonify(data_list[0]), 200
+    
+    # Accessing dictionaries by index
+    result = [data_list[1], data_list[0]]
+    
+    return jsonify(result), 200
+
 
 
 if __name__ == '__main__':
