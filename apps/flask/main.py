@@ -30,23 +30,22 @@ credentials_dict = {
     "universe_domain": "googleapis.com"
 }
 
-# Initialize Firebase with the credentials
 cred = credentials.Certificate(credentials_dict)
 firebase_app = initialize_app(cred)
-
-
-
 
 WEATHER_API=os.getenv('WEATHERAPI_API_KEY')
 GEMINI_API=os.getenv('GEMINI_API_KEY')
 
 app = Flask(__name__)
 
+
 db=firestore.client()
+
 
 @app.route('/', methods=['GET'])
 def index():
     return '<samp>🔼 Sahaya Flask for Backend?</samp>'
+
 
 @app.route('/api/gemini/',methods = ['GET'])
 def gemini():
@@ -71,9 +70,46 @@ def gemini():
     print(response.text)
     return jsonify(response.text)
 
+
 @app.route('/api/debug/backend/',methods = ['GET'])
 def backend():
     return jsonify(requests.get('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json').text)
+
+
+
+def add_data_to_firestore(collection_name, key, data):
+    doc_ref = db.collection(collection_name).document(key)
+    doc_ref.set({key: data})
+@app.route('/api/v1/',methods = ['POST'])
+def add_details():
+    try:
+        data = request.get_json()
+
+        # Validate that 'mode' key is present in the request
+        if 'mode' not in data:
+            raise ValueError("Missing 'mode' key in the request.")
+
+        key = data['mode']
+        data.pop('mode')
+
+        # Add data to Firestore
+        add_data_to_firestore('needs_and_gives', key, data)
+
+        return jsonify({'message': 'success'}), 200
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+
+@app.route('/api/v1/',methods = ['GET'])
+def get_data_from_firestore():
+    # Get the document reference
+    doc_ref = db.collection('needs_and_gives')
+    doc_data = doc_ref.get().to_dict()
+    return doc_data
+
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)
