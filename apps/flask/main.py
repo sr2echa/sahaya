@@ -113,9 +113,10 @@ def get_data_from_firestore():
         data_list.append(doc.to_dict())
     
     # Accessing dictionaries by index
-    result = [data_list[1], data_list[0]]
+    result = {"need":data_list[1]["need"],"give":data_list[0]["give"]}
+    return result,200
     
-    return jsonify(result), 200
+    
 
 
 
