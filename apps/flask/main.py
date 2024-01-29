@@ -3,33 +3,35 @@ from flask import Flask, request, jsonify, redirect
 from dotenv import load_dotenv
 import google.generativeai as genai 
 import os
+import json
 
 from firebase_admin import credentials, initialize_app,firestore
 load_dotenv()
 
-project_id = os.getenv('PROJECT_ID')
-private_key_id = os.getenv('PRIVATE_KEY_ID')
-private_key = os.getenv('PRIVATE_KEY')
-client_email = os.getenv('CLIENT_EMAIL')
-client_id = os.getenv('CLIENT_ID')
-auth_uri = os.getenv('AUTH_URI')
-client_x509_cert_url = os.getenv('CLIENT_X509_CERT_URL')
+# project_id = os.getenv('PROJECT_ID')
+# private_key_id = os.getenv('PRIVATE_KEY_ID')
+# private_key = os.getenv('PRIVATE_KEY')
+# client_email = os.getenv('CLIENT_EMAIL')
+# client_id = os.getenv('CLIENT_ID')
+# auth_uri = os.getenv('AUTH_URI')
+# client_x509_cert_url = os.getenv('CLIENT_X509_CERT_URL')
 
-credentials_dict = {
-    "type": "service_account",
-    "project_id": project_id,
-    "private_key_id": private_key_id,
-    "private_key": private_key,
-    "client_email": client_email,
-    "client_id": client_id,
-    "auth_uri": auth_uri,
-    "token_uri": "https://oauth2.googleapis.com/token",
-    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "client_x509_cert_url": client_x509_cert_url,
-    "universe_domain": "googleapis.com"
-}
+# credentials_dict = {
+#     "type": "service_account",
+#     "project_id": project_id,
+#     "private_key_id": private_key_id,
+#     "private_key": str(private_key),
+#     "client_email": client_email,
+#     "client_id": client_id,
+#     "auth_uri": auth_uri,
+#     "token_uri": "https://oauth2.googleapis.com/token",
+#     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+#     "client_x509_cert_url": client_x509_cert_url,
+#     "universe_domain": "googleapis.com"
+# }
 
-cred = credentials.Certificate(credentials_dict)
+
+cred = credentials.Certificate(json.loads(os.getenv('firebase')))
 firebase_app = initialize_app(cred)
 db=firestore.client()
 
@@ -112,4 +114,4 @@ def get_data_from_firestore():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True)
