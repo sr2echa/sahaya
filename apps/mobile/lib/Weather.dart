@@ -31,60 +31,77 @@ class _WeatherScreenState extends State<WeatherScreen> {
     return Scaffold(
       appBar: AppBar(),
       body: weatherData.isEmpty
-          ? Center(child: CircularProgressIndicator())
-          : SingleChildScrollView(
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(height: 20),
-                    // Display the colored dot above the icon
-                    SizedBox(
-                      width: 20,
-                      height: 20,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: _getColor(weatherData['Color']),
-                          shape: BoxShape.circle,
-                        ),
+          ? const Center(child: CircularProgressIndicator())
+          : Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 0.1),
+                  // Display the colored dot above the icon
+                  SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: _getColor(weatherData['Color']),
+                        shape: BoxShape.circle,
                       ),
                     ),
-                    SizedBox(height: 20),
-                    // Display the weather icon and description
-                    Icon(
-                      _getWeatherIcon(weatherData['weather']),
-                      size: 150,
+                  ),
+                  const SizedBox(height: 40),
+                  // Display the weather icon and description
+                  Icon(
+                    _getWeatherIcon(weatherData['weather']),
+                    size: 150,
+                  ),
+                  const SizedBox(height: 40),
+                  Text(
+                    weatherData['weather'],
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.kanit().fontFamily,
+                      fontSize: 35,
                     ),
-                    Text(
-                      weatherData['weather'],
-                      style: TextStyle(
-                        fontFamily: GoogleFonts.kanit().fontFamily,
-                        fontSize: 35,
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    width: 250,
+                    height: 35,
+                    decoration: ShapeDecoration(
+                      color: Color(0xFFD9D9D9),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(100),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    // Display the precautions
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '      Precautions:',
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.kanit().fontFamily,
-                            fontSize: 20,
+                    child: Center(
+                      child: Text(
+                        'In ${weatherData["Time"]} hrs',
+                        style: GoogleFonts.kanit(
+                          textStyle:const  TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children:
-                              _buildPrecautionItems(weatherData['Precautions']),
-                        ),
-                      ],
+                      ),
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(height: 40),
+                  // Display the precautions
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: _buildPrecautionItems(
+                                weatherData['Precautions']),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
     );
@@ -121,15 +138,31 @@ class _WeatherScreenState extends State<WeatherScreen> {
   // Function to build list of precaution items
   List<Widget> _buildPrecautionItems(List<dynamic> precautions) {
     return precautions
-        .map((precaution) => ListTile(
-              leading: Icon(Icons.circle),
-              title: Text(
-                precaution,
-                style: TextStyle(
-                  fontFamily: GoogleFonts.kanit().fontFamily,
+        .map(
+          (precaution) => Padding(
+            padding: const EdgeInsets.only(
+                left: 40.0, right: 40.5), // Adjust the value as needed
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 0), // Adjust the horizontal padding
+                  dense: true,
+                  leading: Icon(Icons.circle, size: 10),
+                  title: Text(
+                    precaution,
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.kanit().fontFamily,
+                      fontSize: 14,
+                    ),
+                  ),
                 ),
-              ),
-            ))
+                const SizedBox(height: 4), // Adjust the height as needed
+              ],
+            ),
+          ),
+        )
         .toList();
   }
 }
