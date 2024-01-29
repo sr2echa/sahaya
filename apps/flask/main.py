@@ -4,7 +4,6 @@ from dotenv import load_dotenv
 import google.generativeai as genai 
 import os
 
-import firebase_admin
 from firebase_admin import credentials, initialize_app,firestore
 load_dotenv()
 
@@ -32,14 +31,14 @@ credentials_dict = {
 
 cred = credentials.Certificate(credentials_dict)
 firebase_app = initialize_app(cred)
+db=firestore.client()
+
 
 WEATHER_API=os.getenv('WEATHERAPI_API_KEY')
 GEMINI_API=os.getenv('GEMINI_API_KEY')
 
 app = Flask(__name__)
 
-
-db=firestore.client()
 
 
 @app.route('/', methods=['GET'])
@@ -71,32 +70,32 @@ def gemini():
     return jsonify(response.text)
 
 
-@app.route('/api/debug/backend/',methods = ['GET'])
-def backend():
-    return jsonify(requests.get('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json').text)
-
-
-
 def add_data_to_firestore(collection_name, key, data):
     doc_ref = db.collection(collection_name).document(key)
-    doc_ref.set({key: data})
+    current_data = doc_ref.get().to_dict()
+    if current_data and key in current_data:
+        if isinstance(current_data[key], list):
+            current_data[key].append(data)
+        else:
+            current_data[key] = [current_data[key], data]
+    else:
+        current_data = {key: [data]}
+
+    doc_ref.set(current_data)
+
+
 @app.route('/api/v1/',methods = ['POST'])
 def add_details():
     try:
         data = request.get_json()
-
-        # Validate that 'mode' key is present in the request
         if 'mode' not in data:
             raise ValueError("Missing 'mode' key in the request.")
 
         key = data['mode']
         data.pop('mode')
-
-        # Add data to Firestore
         add_data_to_firestore('needs_and_gives', key, data)
-
         return jsonify({'message': 'success'}), 200
-
+    
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
@@ -104,11 +103,12 @@ def add_details():
 
 @app.route('/api/v1/',methods = ['GET'])
 def get_data_from_firestore():
-    # Get the document reference
     doc_ref = db.collection('needs_and_gives')
-    doc_data = doc_ref.get().to_dict()
-    return doc_data
-
+    docs = doc_ref.stream()
+    data_list = []
+    for doc in docs:
+        data_list.append(doc.to_dict())
+    return jsonify(data_list[0]), 200
 
 
 if __name__ == '__main__':
