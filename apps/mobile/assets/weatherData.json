@@ -2,6 +2,7 @@
     "Color": "red",
     "weather": "Rainy",
     "Alert": null,
+    "Time":"4",
     "Precautions": [
      "Stay hydrated by drinking plenty of fluids.",
      "Avoid strenuous outdoor activities during the hottest part of the day.",
