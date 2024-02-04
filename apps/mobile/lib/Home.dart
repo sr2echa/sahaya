@@ -3,14 +3,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:shared_preferences/shared_preferences.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
 // import 'package:material_segmented_control/material_segmented_control.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:http/http.dart' as http;
@@ -19,7 +18,48 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
+class SOSButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 160.0,
+      right: 20.0,
+      child: FloatingActionButton(
+        onPressed: () => _sendSOS(context),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            'SOS',
+            style: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+              
+            ),
+          ),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        backgroundColor: const Color.fromARGB(255, 250, 121, 121), // Customize the button color
+      ),
+    );
+  }
 
+  void _sendSOS(BuildContext context) async {
+    final String message = 'SOS! I need help with the climate crisis!';
+    final String uri = 'sms:?body=${Uri.encodeQueryComponent(message)}';
+
+    if (await canLaunch(uri)) {
+      await launch(uri);
+    } else {
+      // Handle error
+      print('Could not launch $uri');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: Could not launch messaging app')),
+      );
+    }
+  }
+}
 class _HomeState extends State<Home> {
   Completer<GoogleMapController> _controllerCompleter = Completer();
   late GoogleMapController mapController;
@@ -30,7 +70,6 @@ class _HomeState extends State<Home> {
   String _mapStyle = '';
   bool isHelping = false;
   bool isOffline = false;
-  
 
   late List<Marker> _hospitals = [];
   late List<Marker> _reliefCamps = [];
@@ -632,6 +671,7 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+
   Widget _buildOfflineWidget() {
     return Container(
       margin: EdgeInsets.all(20.0),
@@ -640,7 +680,7 @@ class _HomeState extends State<Home> {
         color: Colors.redAccent,
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child:const Row(
+      child: const Row(
         children: [
           Icon(Icons.error_outline, color: Colors.white),
           SizedBox(width: 10.0),
@@ -793,11 +833,12 @@ class _HomeState extends State<Home> {
             children: [
               _buildTopFloatingBar(),
               _buildFilterBar(),
-              isOffline ? _buildOfflineWidget(): Container(),
+              isOffline ? _buildOfflineWidget() : Container(),
             ],
           ),
           recenterBtn(_controllerCompleter, currentLocation),
           actionBtn(isHelping, currentLocation, selectedFilter),
+          SOSButton(),
         ],
       ),
     );
