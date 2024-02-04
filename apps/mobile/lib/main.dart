@@ -44,7 +44,6 @@ class CustomNavigationBar extends StatelessWidget {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterConfig.loadEnvVariables();
-
   final prefs = await SharedPreferences.getInstance();
   var phoneNumber = prefs.getString('phoneNumber');
   bool permissionsGranted = prefs.getBool('permissionsGranted') ?? false;
