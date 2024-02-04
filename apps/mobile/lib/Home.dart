@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'package:flutter/services.dart' show rootBundle; 
-import 'package:shared_preferences/shared_preferences.dart'; 
+import 'package:flutter/services.dart' show rootBundle;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 
-import 'package:google_fonts/google_fonts.dart'; 
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 // import 'package:material_segmented_control/material_segmented_control.dart';
-
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:http/http.dart' as http;
-
 
 class Home extends StatefulWidget {
   @override
@@ -26,18 +25,27 @@ class _HomeState extends State<Home> {
   late GoogleMapController mapController;
   late LatLng currentLocation = LatLng(0, 0);
   bool locationLoaded = false;
-  CameraPosition currentCameraPosition = CameraPosition(target: LatLng(0, 0), zoom: 0);
+  CameraPosition currentCameraPosition =
+      CameraPosition(target: LatLng(0, 0), zoom: 0);
   String _mapStyle = '';
   bool isHelping = false;
+  bool isOffline = false;
+  
 
   late List<Marker> _hospitals = [];
   late List<Marker> _reliefCamps = [];
   late List<Marker> _supplies = [];
   late List<Marker> _shelters = [];
 
-
   late List<Marker> _volunteers = [];
   late List<Marker> _food = [];
+
+  Future<void> _checkConnectivity() async {
+    final isConnected = await InternetConnectionChecker().hasConnection;
+    setState(() {
+      isOffline = !isConnected;
+    });
+  }
 
   List<Map<String, dynamic>> filtersNeedHelp = [
     {"type": "Hospital", "icon": FontAwesomeIcons.truckMedical},
@@ -62,6 +70,9 @@ class _HomeState extends State<Home> {
     _loadMapStyle();
     _loadModePreference();
     _loadJsonData();
+    Timer.periodic(Duration(seconds: 5), (timer) {
+      _checkConnectivity();
+    });
   }
 
   void _loadMapStyle() async {
@@ -75,25 +86,26 @@ class _HomeState extends State<Home> {
   // }
 
   Future<void> _loadJsonData() async {
-    final url = Uri.parse('https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json');
+    final url = Uri.parse(
+        'https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
         // final jsonResponse = json.decode(response.body);
-        final jsonResponse = json.decode(response.body.replaceAll('\n', '').replaceAll('  ', ''));
+        final jsonResponse = json
+            .decode(response.body.replaceAll('\n', '').replaceAll('  ', ''));
         print(jsonResponse);
         _processJsonData(jsonResponse);
       } else {
-        print('Failed to load data from the internet. Status code: ${response.statusCode}');
+        print(
+            'Failed to load data from the internet. Status code: ${response.statusCode}');
       }
     } catch (e) {
       print("Error fetching data: $e");
     }
   }
 
-
-  void _processJsonData(Map<String, dynamic> data) async{
-    
+  void _processJsonData(Map<String, dynamic> data) async {
     List<Marker> hospitals = [];
     List<Marker> reliefCamps = [];
     List<Marker> supplies = [];
@@ -108,17 +120,16 @@ class _HomeState extends State<Home> {
     );
 
     for (var item in data['need']) {
-      LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+      LatLng location =
+          LatLng(item['location']['lat'], item['location']['lng']);
       Marker marker = Marker(
-        markerId: MarkerId(location.toString()),
-        anchor: Offset(0.5 , 0.5),
-        position: location,
-        icon: icon,
-
-        onTap: () {
-          _showLocationDetails(context, item);
-        }
-      );
+          markerId: MarkerId(location.toString()),
+          anchor: Offset(0.5, 0.5),
+          position: location,
+          icon: icon,
+          onTap: () {
+            _showLocationDetails(context, item);
+          });
 
       switch (item['type']) {
         case 'hospital':
@@ -136,29 +147,29 @@ class _HomeState extends State<Home> {
       }
     }
 
-
     for (var item in data['give']) {
-      LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+      LatLng location =
+          LatLng(item['location']['lat'], item['location']['lng']);
       Marker marker = Marker(
-        markerId: MarkerId(item['type'] +  location.toString(),),
-        position: location, 
-        anchor: Offset(0.5 , 0.5),
-        icon: icon,
+          markerId: MarkerId(
+            item['type'] + location.toString(),
+          ),
+          position: location,
+          anchor: Offset(0.5, 0.5),
+          icon: icon,
+          onTap: () {
+            _showLocationDetails(context, item);
+          });
 
-        onTap: () {
-          _showLocationDetails(context, item);
-          }
-      );
-
-    switch (item['type']) {
-      case 'volunteer':
-        volunteers.add(marker);
-        break;
-      case 'food':
-        food.add(marker);
-        break;
+      switch (item['type']) {
+        case 'volunteer':
+          volunteers.add(marker);
+          break;
+        case 'food':
+          food.add(marker);
+          break;
+      }
     }
-  }
 
     setState(() {
       _hospitals = hospitals;
@@ -170,14 +181,15 @@ class _HomeState extends State<Home> {
     });
   }
 
-  
-  void _showLocationDetails(BuildContext context, Map<String, dynamic> locationDetails) async {
+  void _showLocationDetails(
+      BuildContext context, Map<String, dynamic> locationDetails) async {
     final double startLatitude = currentLocation.latitude;
     final double startLongitude = currentLocation.longitude;
     final double endLatitude = locationDetails['location']['lat'];
     final double endLongitude = locationDetails['location']['lng'];
 
-    double distanceInMeters = Geolocator.distanceBetween(startLatitude, startLongitude, endLatitude, endLongitude);
+    double distanceInMeters = Geolocator.distanceBetween(
+        startLatitude, startLongitude, endLatitude, endLongitude);
     String distanceDisplay = distanceInMeters < 1000
         ? '${distanceInMeters.toStringAsFixed(0)}m'
         : '${(distanceInMeters / 1000).toStringAsFixed(1)}km';
@@ -230,21 +242,18 @@ class _HomeState extends State<Home> {
                     ),
                     TextButton.icon(
                       onPressed: () {
-                        _openMapRoute(startLatitude, startLongitude, endLatitude, endLongitude);
+                        _openMapRoute(startLatitude, startLongitude,
+                            endLatitude, endLongitude);
                       },
                       icon: Icon(Icons.directions, color: Colors.blue),
                       label: Text(
                         'Route',
-                        style: GoogleFonts.getFont(
-                          "Lexend",
-                          color: Colors.blue
-                        ),
+                        style:
+                            GoogleFonts.getFont("Lexend", color: Colors.blue),
                       ),
                     ),
                   ],
                 ),
-
-                
                 Row(
                   children: [
                     Icon(Icons.telegram, color: Colors.black),
@@ -261,14 +270,13 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     TextButton.icon(
-                      onPressed: () => launch('tel:${locationDetails['phone']}'),
+                      onPressed: () =>
+                          launch('tel:${locationDetails['phone']}'),
                       icon: Icon(Icons.call, color: Colors.blue),
                       label: Text(
                         ' Call ',
-                        style: GoogleFonts.getFont(
-                          "Lexend",
-                          color: Colors.blue
-                        ),
+                        style:
+                            GoogleFonts.getFont("Lexend", color: Colors.blue),
                       ),
                     ),
                   ],
@@ -305,8 +313,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _openMapRoute(double startLat, double startLng, double endLat, double endLng) async {
-    String googleMapsUrl = "https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$endLat,$endLng&travelmode=driving";
+  void _openMapRoute(
+      double startLat, double startLng, double endLat, double endLng) async {
+    String googleMapsUrl =
+        "https://www.google.com/maps/dir/?api=1&origin=$startLat,$startLng&destination=$endLat,$endLng&travelmode=driving";
     if (await canLaunch(googleMapsUrl)) {
       await launch(googleMapsUrl);
     } else {
@@ -314,14 +324,14 @@ class _HomeState extends State<Home> {
     }
   }
 
-
-
   void _getCurrentLocation() async {
-    var position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    var position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
     setState(() {
       currentLocation = LatLng(position.latitude, position.longitude);
       locationLoaded = true;
-      currentCameraPosition = CameraPosition(target: currentLocation, zoom: 15.0);
+      currentCameraPosition =
+          CameraPosition(target: currentLocation, zoom: 15.0);
     });
   }
 
@@ -368,7 +378,6 @@ class _HomeState extends State<Home> {
     return markers;
   }
 
-
   // Set<Circle> _buildCircles() {
   //   return {
   //     Circle(
@@ -384,7 +393,7 @@ class _HomeState extends State<Home> {
 
   // Set<Marker> _buildMarkers() {
   //   return {
-  //     if (currentCameraPosition.zoom < 10) 
+  //     if (currentCameraPosition.zoom < 10)
   //       Marker(
   //         markerId: MarkerId('current_location_marker'),
   //         position: currentLocation,
@@ -410,28 +419,25 @@ class _HomeState extends State<Home> {
   //   print('Current Location: $currentLocation');
   //   print('Selected Filter: $selectedFilter');
   //   print('Selected Mode: ${isHelping ? "Helping" : "Need Help"}');
-    
+
   // }
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------
- 
 
   void actionButtonClickFn() async {
     final prefs = await SharedPreferences.getInstance();
-    String phoneNumber = prefs.getString('phoneNumber') ?? 'No phone number set';
+    String phoneNumber =
+        prefs.getString('phoneNumber') ?? 'No phone number set';
 
     Map<String, IconData> helpIcons = {
       'Volunteer': Icons.volunteer_activism,
       'Donate': Icons.monetization_on,
       'Provide Shelter': Icons.house,
       'Offer Food': Icons.food_bank,
-
       'Medical': Icons.medical_services,
-      
       'Shelter': Icons.house,
       'Food': Icons.fastfood,
       'Clothing': Icons.checkroom,
-
       'Other': Icons.help_outline,
     };
 
@@ -484,28 +490,37 @@ class _HomeState extends State<Home> {
                           padding: EdgeInsets.symmetric(vertical: 15),
                           decoration: BoxDecoration(
                             border: isSelected
-                                ? Border.all(color: Theme.of(context).primaryColor, width: 2)
+                                ? Border.all(
+                                    color: Theme.of(context).primaryColor,
+                                    width: 2)
                                 : Border.all(color: Colors.grey[300]!),
                             borderRadius: BorderRadius.circular(10),
                           ),
                           child: Row(
                             children: [
                               SizedBox(width: 15), // Padding on the left side
-                              Icon(helpIcons[option], color: isSelected ? Theme.of(context).primaryColor : Colors.grey),
-                              SizedBox(width: 15), // Space between the icon and text
+                              Icon(helpIcons[option],
+                                  color: isSelected
+                                      ? Theme.of(context).primaryColor
+                                      : Colors.grey),
+                              SizedBox(
+                                  width: 15), // Space between the icon and text
                               Expanded(
                                 child: Text(
                                   option,
                                   style: GoogleFonts.getFont(
                                     "Lexend",
                                     fontWeight: FontWeight.bold,
-                                    color: isSelected ? Theme.of(context).primaryColor : Colors.black,
+                                    color: isSelected
+                                        ? Theme.of(context).primaryColor
+                                        : Colors.black,
                                     fontSize: 16,
                                   ),
                                 ),
                               ),
                               if (isSelected)
-                                Icon(Icons.check, color: Theme.of(context).primaryColor),
+                                Icon(Icons.check,
+                                    color: Theme.of(context).primaryColor),
                               SizedBox(width: 15), // Padding on the right side
                             ],
                           ),
@@ -518,7 +533,8 @@ class _HomeState extends State<Home> {
                     style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
                       primary: isHelping ? Colors.blue : Colors.red,
-                      padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     ),
                     child: Text(
                       'Submit',
@@ -529,16 +545,19 @@ class _HomeState extends State<Home> {
                         color: Colors.white,
                       ),
                     ),
-                    onPressed: isAnyOptionSelected() ? () {
-                      List<String> selectedHelp = helpOptions.entries
-                          .where((entry) => entry.value)
-                          .map((entry) => entry.key)
-                          .toList();
-                      // Handle the submission logic here
-                      print('Phone Number: $phoneNumber');
-                      print('Selected Help Options: $selectedHelp');
-                      Navigator.pop(context); // Close the modal bottom sheet
-                    } : null,
+                    onPressed: isAnyOptionSelected()
+                        ? () {
+                            List<String> selectedHelp = helpOptions.entries
+                                .where((entry) => entry.value)
+                                .map((entry) => entry.key)
+                                .toList();
+                            // Handle the submission logic here
+                            print('Phone Number: $phoneNumber');
+                            print('Selected Help Options: $selectedHelp');
+                            Navigator.pop(
+                                context); // Close the modal bottom sheet
+                          }
+                        : null,
                   ),
                 ],
               ),
@@ -549,16 +568,14 @@ class _HomeState extends State<Home> {
     );
   }
 
-
-  
   // <--------------------- UI --------------------->
 
   Widget _buildTopFloatingBar() {
-    return Container( 
+    return Container(
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 20),
       margin: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10),
-      child:Positioned(
+      child: Positioned(
         // top: MediaQuery.of(context).padding.top + 10,
         left: MediaQuery.of(context).size.width * 0.075,
         right: MediaQuery.of(context).size.width * 0.075,
@@ -567,7 +584,9 @@ class _HomeState extends State<Home> {
           decoration: BoxDecoration(
             color: Color.fromARGB(255, 227, 227, 227),
             borderRadius: BorderRadius.circular(30),
-            boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 8, spreadRadius: 2)],
+            boxShadow: [
+              BoxShadow(color: Colors.black26, blurRadius: 8, spreadRadius: 2)
+            ],
           ),
           child: Row(
             children: [
@@ -578,24 +597,20 @@ class _HomeState extends State<Home> {
                       padding: EdgeInsets.symmetric(horizontal: 8),
                       child: Text(
                         'Need Help',
-                        style: GoogleFonts.getFont(
-                        'Lexend',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: isHelping ? Colors.grey : Colors.redAccent
-                        ),
+                        style: GoogleFonts.getFont('Lexend',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: isHelping ? Colors.grey : Colors.redAccent),
                       ),
                     ),
                     1: Padding(
                       padding: EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         'Give Help',
-                        style: GoogleFonts.getFont(
-                        'Lexend',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                        color: isHelping ? Colors.blue : Colors.grey
-                        ),
+                        style: GoogleFonts.getFont('Lexend',
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                            color: isHelping ? Colors.blue : Colors.grey),
                       ),
                     ),
                   },
@@ -607,9 +622,8 @@ class _HomeState extends State<Home> {
                   },
                   backgroundColor: Color.fromARGB(255, 227, 227, 227),
                   thumbColor: Colors.white,
-                  
-                  // Add Styles if needed <-->
 
+                  // Add Styles if needed <-->
                 ),
               ),
             ],
@@ -618,13 +632,39 @@ class _HomeState extends State<Home> {
       ),
     );
   }
+  Widget _buildOfflineWidget() {
+    return Container(
+      margin: EdgeInsets.all(20.0),
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.redAccent,
+        borderRadius: BorderRadius.circular(10.0),
+      ),
+      child:const Row(
+        children: [
+          Icon(Icons.error_outline, color: Colors.white),
+          SizedBox(width: 10.0),
+          Expanded(
+            child: Text(
+              'No network connection, switching to SMS mode',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 13.0,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
- Widget _buildFilterBar() {
-    List<Map<String, dynamic>> currentFilters = isHelping ? filtersGiveHelp : filtersNeedHelp;
+  Widget _buildFilterBar() {
+    List<Map<String, dynamic>> currentFilters =
+        isHelping ? filtersGiveHelp : filtersNeedHelp;
     return Container(
       height: 60,
       padding: EdgeInsets.symmetric(horizontal: 10),
-      child: ListView.builder(  
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: currentFilters.length,
         itemBuilder: (BuildContext context, int index) {
@@ -634,13 +674,13 @@ class _HomeState extends State<Home> {
           return Container(
             margin: EdgeInsets.symmetric(horizontal: 3),
             child: FilterChip(
-              avatar: Icon(filter['icon'], color: isSelected ? Colors.white : Colors.grey),
-              label: Text(filter['type'], style: GoogleFonts.getFont(
-                'Lexend',
-                fontWeight: FontWeight.w500,
-                fontSize: 16,
-                color: isSelected ? Colors.white : Colors.grey
-              )),
+              avatar: Icon(filter['icon'],
+                  color: isSelected ? Colors.white : Colors.grey),
+              label: Text(filter['type'],
+                  style: GoogleFonts.getFont('Lexend',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                      color: isSelected ? Colors.white : Colors.grey)),
               selected: isSelected,
               onSelected: (bool value) {
                 setState(() {
@@ -648,7 +688,9 @@ class _HomeState extends State<Home> {
                 });
               },
               backgroundColor: Color.fromARGB(255, 227, 227, 227),
-              selectedColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
+              selectedColor: isHelping
+                  ? Color.fromARGB(255, 137, 202, 255)
+                  : Color.fromARGB(255, 250, 121, 121),
               checkmarkColor: Colors.transparent,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30),
@@ -657,8 +699,7 @@ class _HomeState extends State<Home> {
                 ),
               ),
               shadowColor: Colors.black,
-              elevation: 3  ,
-
+              elevation: 3,
               showCheckmark: false,
             ),
           );
@@ -666,9 +707,9 @@ class _HomeState extends State<Home> {
       ),
     );
   }
-  
 
-Widget recenterBtn(Completer<GoogleMapController> controllerCompleter, LatLng currentLocation) {
+  Widget recenterBtn(Completer<GoogleMapController> controllerCompleter,
+      LatLng currentLocation) {
     return FutureBuilder<GoogleMapController>(
       future: controllerCompleter.future,
       builder: (context, snapshot) {
@@ -717,17 +758,18 @@ Widget recenterBtn(Completer<GoogleMapController> controllerCompleter, LatLng cu
     required String selectedFilter,
   }) {
     return FloatingActionButton(
-      
       child: Icon(
-        isHelping ? FontAwesomeIcons.handHoldingHeart : FontAwesomeIcons.handsHelping,
+        isHelping
+            ? FontAwesomeIcons.handHoldingHeart
+            : FontAwesomeIcons.handsHelping,
         color: Colors.white,
       ),
-      
-      backgroundColor: isHelping ? Color.fromARGB(255, 137, 202, 255) : Color.fromARGB(255, 250, 121, 121),
+      backgroundColor: isHelping
+          ? Color.fromARGB(255, 137, 202, 255)
+          : Color.fromARGB(255, 250, 121, 121),
       onPressed: actionButtonClickFn,
     );
   }
-
 
   // <--------------------- Build --------------------->
   @override
@@ -751,6 +793,7 @@ Widget recenterBtn(Completer<GoogleMapController> controllerCompleter, LatLng cu
             children: [
               _buildTopFloatingBar(),
               _buildFilterBar(),
+              isOffline ? _buildOfflineWidget(): Container(),
             ],
           ),
           recenterBtn(_controllerCompleter, currentLocation),
