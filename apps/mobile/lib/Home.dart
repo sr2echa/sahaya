@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-
+import 'package:permission_handler/permission_handler.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -19,31 +19,117 @@ class Home extends StatefulWidget {
   _HomeState createState() => _HomeState();
 }
 class SOSButton extends StatelessWidget {
+  final bool isHelping;
+
+  SOSButton({required this.isHelping});
+
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      bottom: 160.0,
-      right: 20.0,
-      child: FloatingActionButton(
-        onPressed: () => _sendSOS(context),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            'SOS',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.white,
-              
+    return (!isHelping)
+        ? Positioned(
+            bottom: 160.0,
+            right: 20.0,
+            child: FloatingActionButton(
+              onPressed: () => _onSOSPressed(context),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'SOS',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              backgroundColor: const Color.fromARGB(255, 250, 121, 121),
+            ),
+          )
+        : SizedBox(); // If isHelping is false, return an empty SizedBox
+  }
+  void _onSOSPressed(BuildContext context) async {
+  // Request contacts permission
+  PermissionStatus permissionStatus = await Permission.contacts.request();
+
+  if (permissionStatus.isGranted) {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Sending SOS',
+            style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+          ),
+          content: SizedBox(
+            height: 100.0, // Fixed height
+            child: Center(
+              child: CircularProgressIndicator(),
             ),
           ),
+        );
+      },
+    );
+
+    // Wait for 5 seconds
+    await Future.delayed(Duration(seconds: 5));
+
+    // Close the loading dialog
+    Navigator.of(context).pop();
+
+    // Show alert
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Row(
+            children: [
+              Expanded(
+                child: Text(
+                  'Emergency Alert',
+                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the alert
+                },
+              ),
+            ],
+          ),
+          content: SizedBox(
+            height: 100.0, // Fixed height
+           child: Padding(
+              padding: const EdgeInsets.only(top: 35.0),
+              child: Text(
+                'Your special contacts have been alerted.',
+                style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    // Implement your SOS functionality here
+    print('SOS sent!');
+  } else {
+    // Permission not granted, show a snackbar or dialog to inform the user
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          'Contacts permission required for SOS feature.',
+          style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
         ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
-        backgroundColor: const Color.fromARGB(255, 250, 121, 121), // Customize the button color
       ),
     );
   }
+}
+
 
   void _sendSOS(BuildContext context) async {
     final String message = 'SOS! I need help with the climate crisis!';
@@ -838,7 +924,7 @@ class _HomeState extends State<Home> {
           ),
           recenterBtn(_controllerCompleter, currentLocation),
           actionBtn(isHelping, currentLocation, selectedFilter),
-          SOSButton(),
+          SOSButton(isHelping:isHelping==true),
         ],
       ),
     );
