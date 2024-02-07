@@ -4,41 +4,21 @@ from dotenv import load_dotenv
 import google.generativeai as genai 
 import os
 import json
+from novu.api import EventApi
+from novu.dto.subscriber import SubscriberDto
+from novu.api.subscriber import SubscriberApi
 
 from firebase_admin import credentials, initialize_app,firestore
 load_dotenv()
-
-# project_id = os.getenv('PROJECT_ID')
-# private_key_id = os.getenv('PRIVATE_KEY_ID')
-# private_key = os.getenv('PRIVATE_KEY')
-# client_email = os.getenv('CLIENT_EMAIL')
-# client_id = os.getenv('CLIENT_ID')
-# auth_uri = os.getenv('AUTH_URI')
-# client_x509_cert_url = os.getenv('CLIENT_X509_CERT_URL')
-
-# credentials_dict = {
-#     "type": "service_account",
-#     "project_id": project_id,
-#     "private_key_id": private_key_id,
-#     "private_key": str(private_key),
-#     "client_email": client_email,
-#     "client_id": client_id,
-#     "auth_uri": auth_uri,
-#     "token_uri": "https://oauth2.googleapis.com/token",
-#     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-#     "client_x509_cert_url": client_x509_cert_url,
-#     "universe_domain": "googleapis.com"
-# }
-
-
 #cred = credentials.Certificate(json.loads(os.getenv('firebase')))
-cred = credentials.Certificate(r"C:\Users\lgpoo\Documents\sahaya\apps\flask\firebase.json")
+cred = credentials.Certificate(r'apps\flask\firebase.json')
 firebase_app = initialize_app(cred)
 db=firestore.client()
 
 
 WEATHER_API=os.getenv('WEATHERAPI_API_KEY')
 GEMINI_API=os.getenv('GEMINI_API_KEY')
+NOVU_KEY=os.getenv('NOVUS_API_KEY')
 
 app = Flask(__name__)
 
@@ -56,22 +36,24 @@ def gemini():
     weather_pattern = requests.get(URL).json()
     genai.configure(api_key=GEMINI_API)
     model = genai.GenerativeModel('gemini-pro')
-    # prompt= f"""This is the current weather at {city}. consider the data {weather_pattern} to determine the warninng text which is given in json file and then
-    # Give me a 1-2 Line warning incase of any Thunderstorm, Hurricane, Tornadoo, Tsunami, Hailstorm, Cyclone, Heatwave etc.
-    # The message should contain the time it is anticipated and what calamity.
-    # Also give me few precatuionary measures to be prepared for the particular calamity in {city}.
-    # Warn only if the calamity is less than 48 hours ahead.
 
-    # The response should be of a json of this schema 
-    # 'Color': (Red or Orange or yellow - based on siverity of the climate action.) 1 word (red/orange/yellow/white)
-    # 'weather': (The weather at the moment) 1 word [sunny/clowdy/partly-clowdy/rainy/thunderstorm/snow]
-    # 'time' : ETA for the calamity to happen (time remaining to encounter the drastic climate change) in hours
-    # 'Alert': (The warning about the predicted time and calamity) 1-2 lines [short and crisp & Give the nearest first occurence of such change in weather] the data from the json
-    # 'Precautions': (Few precautions to take - based on the siverity (color) of the calamity) In points format. Tailor it to the particular city based on the input data given [A list of strings - each point is a string element in the list]
-    # Incase, at current, a calamity is going on, (like its raining, etc), Give a response in the above format with a Green 'color' and Alert should consist of the Time the disaster will decrese or will get back to normal. Give the nearest first occurence.
-    # Also, if the weather is normal, give the response with color 'white' and the rest of the response. Give recomendations and alert for airQuality if the color is'white' (the weather is not bad - cloudy, sunny, etc). If the airQuality is good and has no harm.
+    # commented prompt for the model
+    """prompt= This is the current weather at {city}. consider the data {weather_pattern} to determine the warninng text which is given in json file and then
+    Give me a 1-2 Line warning incase of any Thunderstorm, Hurricane, Tornadoo, Tsunami, Hailstorm, Cyclone, Heatwave etc.
+    The message should contain the time it is anticipated and what calamity.
+    Also give me few precatuionary measures to be prepared for the particular calamity in {city}.
+    Warn only if the calamity is less than 48 hours ahead.
+
+    The response should be of a json of this schema 
+    'Color': (Red or Orange or yellow - based on siverity of the climate action.) 1 word (red/orange/yellow/white)
+    'weather': (The weather at the moment) 1 word [sunny/clowdy/partly-clowdy/rainy/thunderstorm/snow]
+    'time' : ETA for the calamity to happen (time remaining to encounter the drastic climate change) in hours
+    'Alert': (The warning about the predicted time and calamity) 1-2 lines [short and crisp & Give the nearest first occurence of such change in weather] the data from the json
+    'Precautions': (Few precautions to take - based on the siverity (color) of the calamity) In points format. Tailor it to the particular city based on the input data given [A list of strings - each point is a string element in the list]
+    Incase, at current, a calamity is going on, (like its raining, etc), Give a response in the above format with a Green 'color' and Alert should consist of the Time the disaster will decrese or will get back to normal. Give the nearest first occurence.
+    Also, if the weather is normal, give the response with color 'white' and the rest of the response. Give recomendations and alert for airQuality if the color is'white' (the weather is not bad - cloudy, sunny, etc). If the airQuality is good and has no harm. """
     
-    # Strictly give the output as a json"""
+    # Strictly give the output as a json
     prompt = f"""This is the current weather at {city}: {weather_pattern}. Analyze this data to generate a warning if there's a forecast of any severe weather events like Thunderstorms, Hurricanes, Tornadoes, Tsunamis, Hailstorms, Cyclones, or Heatwaves within the next 48 hours. The warning should include the type of event, its anticipated time of occurrence, and precautionary measures specific to {city}."
 
     "Please format the response according to the following JSON schema: "
@@ -83,7 +65,7 @@ def gemini():
 
     "In case a severe weather event is currently happening, use a Green color in the response and include the estimated time when the event will diminish or return to normal. For normal weather conditions (e.g., sunny or cloudy), use a White color and provide recommendations and alerts related to air quality. Include alerts for air quality only if it's harmful."""
     response = model.generate_content(prompt)
-    print(response.text)
+    #print(response.text)
     dic = json.loads(response.text)
     return jsonify(dic)
 
@@ -132,6 +114,20 @@ def get_data_from_firestore():
     result = {"need":data_list[1]["need"],"give":data_list[0]["give"]}
     return result,200
     
-    
+
+@app.route('/api/v1/sendtxt', methods=['POST'])
+def send_message():
+    sub = request.form.get('sub')
+    event_api = EventApi("https://api.novu.co", NOVU_KEY)
+    try:
+        event_api.trigger(
+            name="sahaya", # sends emergency message to particulat subscriber 
+            recipients=sub,
+            payload={}
+        )
+        return "Message sent successfully", 200
+    except Exception as e:
+        return f"Error sending message: {e}", 500
+
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
