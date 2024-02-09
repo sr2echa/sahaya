@@ -53,21 +53,24 @@ class SOSButton extends StatelessWidget {
   // Request contacts permission
   PermissionStatus permissionStatus = await Permission.contacts.request();
 
-  if (permissionStatus.isGranted) {
+ if (permissionStatus.isGranted) {
     // Show loading dialog
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0), // Decrease the border radius
+          ),
           title: Text(
             'Sending SOS',
             style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
           ),
           content: SizedBox(
-            height: 100.0, // Fixed height
-            child: Center(
-              child: CircularProgressIndicator(),
+            height: 8.5, // Decrease the height of the SizedBox
+            child: LinearProgressIndicator(
+              minHeight: 2.0, // Decrease the minHeight of the LinearProgressIndicator
             ),
           ),
         );
@@ -83,14 +86,18 @@ class SOSButton extends StatelessWidget {
     // Show alert
     showDialog(
       context: context,
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0), // Decrease the border radius
+          ),
           title: Row(
             children: [
               Expanded(
                 child: Text(
                   'Emergency Alert',
-                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily,fontSize: 20),
                 ),
               ),
               IconButton(
@@ -102,9 +109,9 @@ class SOSButton extends StatelessWidget {
             ],
           ),
           content: SizedBox(
-            height: 100.0, // Fixed height
-           child: Padding(
-              padding: const EdgeInsets.only(top: 35.0),
+            height: 40.0, // Fixed height
+            child: Padding(
+              padding: const EdgeInsets.only(top: 0.0),
               child: Text(
                 'Your special contacts have been alerted.',
                 style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
