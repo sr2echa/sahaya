@@ -65,7 +65,7 @@ class SOSButton extends StatelessWidget {
           ),
           title: Text(
             'Sending SOS',
-            style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+            style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily,fontSize: 18),
           ),
           content: SizedBox(
             height: 8.5, // Decrease the height of the SizedBox
@@ -97,7 +97,7 @@ class SOSButton extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Emergency Alert',
-                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily,fontSize: 20),
+                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily,fontSize: 18),
                 ),
               ),
               IconButton(
@@ -113,7 +113,7 @@ class SOSButton extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 0.0),
               child: Text(
-                'Your special contacts have been alerted.',
+                'Your emergency contacts have been alerted.',
                 style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
               ),
             ),
