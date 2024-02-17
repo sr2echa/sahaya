@@ -48,7 +48,7 @@
     ],
 
     "give": [
-        {    "type" : "volunteer",
+        {    "type" : "medical",
             "location" : {
                 "lat" : 37.7749295,
                 "lng" : 79.4194155
