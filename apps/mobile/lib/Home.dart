@@ -294,7 +294,7 @@ class _HomeState extends State<Home> {
           });
 
       switch (item['type']) {
-        case 'medical':
+        case 'volunteer':
           volunteers.add(marker);
           break;
         case 'food':
