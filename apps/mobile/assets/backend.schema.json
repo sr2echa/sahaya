@@ -48,7 +48,17 @@
     ],
 
     "give": [
-        {    "type" : "volunteer",
+        {    
+            "type" : "victim",
+            "location" : {
+                "lat" : 37.8749295,
+                "lng" : 79.4194155
+            },
+            "phone" : "415-555-5555",
+            "help" : ["food"]
+        },
+        {    
+            "type" : "volunteer",
             "location" : {
                 "lat" : 37.7749295,
                 "lng" : 79.4194155

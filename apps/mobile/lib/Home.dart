@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_config/flutter_config.dart';
+import 'package:telephony/telephony.dart';
+// import 'package:sms_maintained/sms.dart';
+// import 'package:flutter_sms/flutter_sms.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -90,14 +94,14 @@ class SOSButton extends StatelessWidget {
       builder: (BuildContext context) {
         return AlertDialog(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(15.0), // Decrease the border radius
+            borderRadius: BorderRadius.circular(15.0), 
           ),
           title: Row(
             children: [
               Expanded(
                 child: Text(
                   'Emergency Alert',
-                  style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily,fontSize: 18),
+                  style: TextStyle(fontFamily: GoogleFonts.getFont('Kanit').fontFamily,fontSize: 18),
                 ),
               ),
               IconButton(
@@ -114,7 +118,7 @@ class SOSButton extends StatelessWidget {
               padding: const EdgeInsets.only(top: 0.0),
               child: Text(
                 'Your emergency contacts have been alerted.',
-                style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+                style: TextStyle(fontFamily: GoogleFonts.getFont('Kanit').fontFamily),
               ),
             ),
           ),
@@ -130,7 +134,7 @@ class SOSButton extends StatelessWidget {
       SnackBar(
         content: Text(
           'Contacts permission required for SOS feature.',
-          style: TextStyle(fontFamily: GoogleFonts.kanit().fontFamily),
+          style: TextStyle(fontFamily: GoogleFonts.getFont('Kanit').fontFamily),
         ),
       ),
     );
@@ -145,7 +149,6 @@ class SOSButton extends StatelessWidget {
     if (await canLaunch(uri)) {
       await launch(uri);
     } else {
-      // Handle error
       print('Could not launch $uri');
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: Could not launch messaging app')),
@@ -168,6 +171,7 @@ class _HomeState extends State<Home> {
   late List<Marker> _reliefCamps = [];
   late List<Marker> _supplies = [];
   late List<Marker> _shelters = [];
+  late List<Marker> _victims = [];
 
   late List<Marker> _volunteers = [];
   late List<Marker> _food = [];
@@ -184,9 +188,11 @@ class _HomeState extends State<Home> {
     {"type": "Relief Camp", "icon": FontAwesomeIcons.tent},
     {"type": "Safe Space", "icon": FontAwesomeIcons.home},
     {"type": "Supplies", "icon": FontAwesomeIcons.boxOpen},
+    {"type": "Volunteer", "icon": FontAwesomeIcons.handsHelping},
   ];
 
   List<Map<String, dynamic>> filtersGiveHelp = [
+    {"type": "Victim", "icon": FontAwesomeIcons.handHoldingMedical},
     {"type": "Volunteer", "icon": FontAwesomeIcons.handsHelping},
     {"type": "Donate", "icon": FontAwesomeIcons.gift},
     {"type": "Shelter", "icon": FontAwesomeIcons.home},
@@ -242,8 +248,9 @@ class _HomeState extends State<Home> {
     List<Marker> reliefCamps = [];
     List<Marker> supplies = [];
     List<Marker> shelters = [];
-
     List<Marker> volunteers = [];
+
+    List<Marker> victims = [];
     List<Marker> food = [];
 
     BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
@@ -276,6 +283,9 @@ class _HomeState extends State<Home> {
         case 'safeSpace':
           shelters.add(marker);
           break;
+        case 'volunteer':
+          volunteers.add(marker);
+          break;
       }
     }
 
@@ -294,6 +304,9 @@ class _HomeState extends State<Home> {
           });
 
       switch (item['type']) {
+        case 'victim':
+          victims.add(marker);
+          break;
         case 'volunteer':
           volunteers.add(marker);
           break;
@@ -308,6 +321,7 @@ class _HomeState extends State<Home> {
       _reliefCamps = reliefCamps;
       _supplies = supplies;
       _shelters = shelters;
+      _victims = victims;
       _volunteers = volunteers;
       _food = food;
     });
@@ -415,7 +429,8 @@ class _HomeState extends State<Home> {
                 ),
                 SizedBox(height: 22),
                 Text(
-                  'Available Assistance:',
+                  locationDetails['type'] == 'victim' ? 'Needs:' : 'Available Assistance:',
+                  //'Available Assistance:',
                   style: GoogleFonts.getFont(
                     "Lexend",
                     fontWeight: FontWeight.bold,
@@ -456,6 +471,23 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<void> _handleOfflineMode() async {
+    if (isOffline) {
+      while (isOffline) {
+        await Future.delayed(Duration(hours: 2));
+        final smsNumber = FlutterConfig.get('SMS_NUMBER');
+        final lat = currentLocation.latitude;
+        final lng = currentLocation.longitude;
+        final message = 'offline $lat $lng';
+        launch('sms:$smsNumber?body=$message');
+        final response = await _waitForResponse(smsNumber);
+        final jsonData = _combineJsonData(response);
+        _processJsonData(jsonData);
+      }
+    }
+  }
+
+
   void _getCurrentLocation() async {
     var position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
@@ -480,6 +512,25 @@ class _HomeState extends State<Home> {
     });
   }
 
+  Future<List<String>> _waitForResponse(String smsNumber) async {
+    final List<String> messages = [];
+    final Telephony telephony = Telephony.instance;
+    List<SmsMessage> smsStream = await telephony.getInboxSms(
+		columns: [SmsColumn.ADDRESS, SmsColumn.BODY],
+		filter: SmsFilter.where(SmsColumn.ADDRESS)
+				 .equals("$smsNumber")
+				 .and(SmsColumn.BODY)
+				 .like(""),
+		sortOrder: [OrderBy(SmsColumn.ADDRESS, sort: Sort.ASC),
+			    OrderBy(SmsColumn.BODY)]
+		);
+    
+
+    await Future.delayed(Duration(minutes: 1));
+    smsStream.isEmpty ? print('No messages') : print('Messages found');
+    return messages;
+  }
+
   Set<Marker> _getMarkersForMap() {
     Set<Marker> markers = {};
 
@@ -496,7 +547,13 @@ class _HomeState extends State<Home> {
       if (selectedFilter.isEmpty || selectedFilter == "Safe Space") {
         markers.addAll(_shelters);
       }
+      if (selectedFilter.isEmpty || selectedFilter == "Volunteer") {
+        markers.addAll(_volunteers);
+      }
     } else {
+      if (selectedFilter.isEmpty || selectedFilter == "Victim") {
+        markers.addAll(_victims);
+      }
       if (selectedFilter.isEmpty || selectedFilter == "Volunteer") {
         markers.addAll(_volunteers);
       }
@@ -508,6 +565,28 @@ class _HomeState extends State<Home> {
     }
 
     return markers;
+  }
+
+  Map<String, dynamic> _combineJsonData(List<String> messages) {
+    final Map<String, dynamic> combinedJson = {};
+    final RegExp numberRegex = RegExp(r'^(\d+)-end$');
+    final Map<int, String> orderedMessages = {};
+
+    for (final message in messages) {
+      final match = numberRegex.firstMatch(message);
+      if (match != null) {
+        final int number = int.parse(match.group(1)!);
+        orderedMessages[number] = message;
+      }
+    }
+
+    final List<String> orderedData = orderedMessages.values.toList();
+    for (final data in orderedData) {
+      final jsonData = jsonDecode(data);
+      combinedJson.addAll(jsonData);
+    }
+
+    return combinedJson;
   }
 
   // Set<Circle> _buildCircles() {
@@ -915,6 +994,7 @@ class _HomeState extends State<Home> {
                   myLocationEnabled: true,
                   myLocationButtonEnabled: false,
                   compassEnabled: false,
+                  mapToolbarEnabled: false,
                   onMapCreated: _onMapCreated,
                   initialCameraPosition: currentCameraPosition,
                   onCameraMove: (position) => currentCameraPosition = position,
