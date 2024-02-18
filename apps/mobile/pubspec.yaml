@@ -45,7 +45,6 @@ flutter:
     - assets/background/
     - assets/maps/
     - assets/maps/markers/
-    - assets/maps/markers/hospital.png
     - assets/weatherData.json
 
 flutter_launcher_icons:

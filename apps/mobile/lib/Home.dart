@@ -243,78 +243,234 @@ class _HomeState extends State<Home> {
     }
   }
 
-  void _processJsonData(Map<String, dynamic> data) async {
+//   Future<BitmapDescriptor> _createMarkerIcon(String type) async {
+//   try {
+//     switch (type) {
+//       case 'hospital':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/hospital.png');
+//       case 'safeSpace':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/safespace.png');
+//       case 'reliefCamp':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/reliefcamp.png');
+//       case 'food':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/food.png');
+//       case 'water':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/water.png');
+//       case 'shelter':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/shelter.png');
+//       case 'supplies':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/supplies.png');
+//       case 'victim':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/victim.png');
+//       case 'volunteer':
+//         return await BitmapDescriptor.fromAssetImage(
+//             ImageConfiguration(size: Size(28, 28)),
+//             'assets/markers/volunteer.png');
+//       default:
+//         return BitmapDescriptor.defaultMarker;
+//     }
+//   } catch (e) {
+//     print('Error loading marker icon: $e');
+//     return BitmapDescriptor.defaultMarker;
+//   }
+// }
+
+
+//   void _processJsonData(Map<String, dynamic> data) async {
+//     List<Marker> hospitals = [];
+//     List<Marker> reliefCamps = [];
+//     List<Marker> supplies = [];
+//     List<Marker> shelters = [];
+//     List<Marker> volunteers = [];
+
+//     List<Marker> victims = [];
+//     List<Marker> food = [];
+
+//     // BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
+//     //   ImageConfiguration(size: Size(28, 28)),
+//     //   'assets/maps/markers/hospital.png',
+//     // );
+
+//     for (var item in data['need']) {
+//       LatLng location =
+//           LatLng(item['location']['lat'], item['location']['lng']);
+//       Marker marker = Marker(
+//           markerId: MarkerId(location.toString()),
+//           anchor: Offset(0.5, 0.5),
+//           position: location,
+//           icon: await _createMarkerIcon(item['type']),
+//           onTap: () {
+//             _showLocationDetails(context, item);
+//           });
+//       // Future marker = _createMarker(item['type'], location.latitude, location.longitude, item);
+      
+
+//       switch (item['type']) {
+//         case 'hospital':
+//           hospitals.add(await marker);
+//           break;
+//         case 'reliefCamp':
+//           reliefCamps.add(await marker);
+//           break;
+//         case 'supplies':
+//           supplies.add(await marker);
+//           break;
+//         case 'safeSpace':
+//           shelters.add(await marker);
+//           break;
+//         case 'volunteer':
+//           volunteers.add(await marker);
+//           break;
+//       }
+//     }
+
+//     for (var item in data['give']) {
+//       LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+//       // Marker marker = await _createMarker(item['type'], location.latitude, location.longitude, item);
+
+//       Marker marker = Marker(
+//           markerId: MarkerId(location.toString()),
+//           anchor: Offset(0.5, 0.5),
+//           position: location,
+//           icon: await _createMarkerIcon(item['type']),
+//           onTap: () {
+//             _showLocationDetails(context, item);
+//           });
+
+//       switch (item['type']) {
+//         case 'victim':
+//           victims.add(marker);
+//           break;
+//         case 'volunteer':
+//           volunteers.add(marker);
+//           break;
+//         case 'food':
+//           food.add(marker);
+//           break;
+//       }
+//     }
+
+//     setState(() {
+//       _hospitals = hospitals;
+//       _reliefCamps = reliefCamps;
+//       _supplies = supplies;
+//       _shelters = shelters;
+//       _victims = victims;
+//       _volunteers = volunteers;
+//       _food = food;
+//     });
+//   }
+
+  Future<void> _processJsonData(Map<String, dynamic> data) async {
     List<Marker> hospitals = [];
     List<Marker> reliefCamps = [];
     List<Marker> supplies = [];
     List<Marker> shelters = [];
     List<Marker> volunteers = [];
-
     List<Marker> victims = [];
     List<Marker> food = [];
 
-    BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
-      'assets/maps/markers/hospital.png',
-    );
+    Future<BitmapDescriptor> _loadMarkerIcon(String type) async {
+      try {
+        switch (type) {
+          case 'hospital':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/hospital.png');
+          case 'safeSpace':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/safespace.png');
+          case 'reliefCamp':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/reliefcamp.png');
+          case 'food':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/food.png');
+          case 'water':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/water.png');
+          case 'shelter':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/shelter.png');
+          case 'supplies':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/supplies.png');
+          case 'victim':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/victim.png');
+          case 'volunteer':
+            return await BitmapDescriptor.fromAssetImage(
+                ImageConfiguration(size: Size(28, 28)),
+                'assets/markers/volunteer.png');
+          default:
+            return BitmapDescriptor.defaultMarker;
+        }
+      } catch (e) {
+        print('Error loading marker icon: $e');
+        return BitmapDescriptor.defaultMarker;
+      }
+    }
 
-    for (var item in data['need']) {
-      LatLng location =
-          LatLng(item['location']['lat'], item['location']['lng']);
-      Marker marker = Marker(
+    List<Future<Marker>> createMarkers(List<dynamic> items) {
+      return items.map<Future<Marker>>((item) async {
+        LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+        return Marker(
           markerId: MarkerId(location.toString()),
           anchor: Offset(0.5, 0.5),
           position: location,
-          icon: icon,
+          icon: await _loadMarkerIcon(item['type']),
           onTap: () {
             _showLocationDetails(context, item);
-          });
-
-      switch (item['type']) {
-        case 'hospital':
-          hospitals.add(marker);
-          break;
-        case 'reliefCamp':
-          reliefCamps.add(marker);
-          break;
-        case 'supplies':
-          supplies.add(marker);
-          break;
-        case 'safeSpace':
-          shelters.add(marker);
-          break;
-        case 'volunteer':
-          volunteers.add(marker);
-          break;
-      }
+          },
+        );
+      }).toList();
     }
 
-    for (var item in data['give']) {
-      LatLng location =
-          LatLng(item['location']['lat'], item['location']['lng']);
-      Marker marker = Marker(
-          markerId: MarkerId(
-            item['type'] + location.toString(),
-          ),
-          position: location,
-          anchor: Offset(0.5, 0.5),
-          icon: icon,
-          onTap: () {
-            _showLocationDetails(context, item);
-          });
+    hospitals = await Future.wait(createMarkers(data['need']
+        .where((item) => item['type'] == 'hospital')
+        .toList()));
+    reliefCamps = await Future.wait(createMarkers(data['need']
+        .where((item) => item['type'] == 'reliefCamp')
+        .toList()));
+    supplies = await Future.wait(createMarkers(data['need']
+        .where((item) => item['type'] == 'supplies')
+        .toList()));
+    shelters = await Future.wait(createMarkers(data['need']
+        .where((item) => item['type'] == 'safeSpace')
+        .toList()));
+    volunteers = await Future.wait(createMarkers(data['need']
+        .where((item) => item['type'] == 'volunteer')
+        .toList()));
 
-      switch (item['type']) {
-        case 'victim':
-          victims.add(marker);
-          break;
-        case 'volunteer':
-          volunteers.add(marker);
-          break;
-        case 'food':
-          food.add(marker);
-          break;
-      }
-    }
+    victims = await Future.wait(createMarkers(data['give']
+        .where((item) => item['type'] == 'victim')
+        .toList()));
+    food = await Future.wait(createMarkers(data['give']
+        .where((item) => item['type'] == 'food')
+        .toList()));
 
     setState(() {
       _hospitals = hospitals;
@@ -326,6 +482,7 @@ class _HomeState extends State<Home> {
       _food = food;
     });
   }
+
 
   void _showLocationDetails(
       BuildContext context, Map<String, dynamic> locationDetails) async {
@@ -560,8 +717,6 @@ class _HomeState extends State<Home> {
       if (selectedFilter.isEmpty || selectedFilter == "Food") {
         markers.addAll(_food);
       }
-
-      // Add more conditions here for other 'give' types if necessary
     }
 
     return markers;
@@ -984,36 +1139,84 @@ class _HomeState extends State<Home> {
   }
 
   // <--------------------- Build --------------------->
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          locationLoaded
-              ? GoogleMap(
-                  myLocationEnabled: true,
-                  myLocationButtonEnabled: false,
-                  compassEnabled: false,
-                  mapToolbarEnabled: false,
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: currentCameraPosition,
-                  onCameraMove: (position) => currentCameraPosition = position,
-                  zoomControlsEnabled: false,
-                  markers: _getMarkersForMap(),
-                )
-              : Center(child: CircularProgressIndicator()),
-          Column(
-            children: [
-              _buildTopFloatingBar(),
-              _buildFilterBar(),
-              isOffline ? _buildOfflineWidget() : Container(),
-            ],
-          ),
-          recenterBtn(_controllerCompleter, currentLocation),
-          actionBtn(isHelping, currentLocation, selectedFilter),
-          SOSButton(isHelping:isHelping==true),
-        ],
-      ),
-    );
-  }
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       body: Stack(
+//         children: [
+//           locationLoaded
+//               ? GoogleMap(
+//                   myLocationEnabled: true,
+//                   myLocationButtonEnabled: false,
+//                   compassEnabled: false,
+//                   mapToolbarEnabled: false,
+//                   onMapCreated: _onMapCreated,
+//                   initialCameraPosition: currentCameraPosition,
+//                   onCameraMove: (position) => currentCameraPosition = position,
+//                   zoomControlsEnabled: false,
+//                   markers: _getMarkersForMap(),
+//                 )
+//               : Center(child: CircularProgressIndicator()),
+//           Column(
+//             children: [
+//               _buildTopFloatingBar(),
+//               _buildFilterBar(),
+//               isOffline ? _buildOfflineWidget() : Container(),
+//             ],
+//           ),
+//           recenterBtn(_controllerCompleter, currentLocation),
+//           actionBtn(isHelping, currentLocation, selectedFilter),
+//           SOSButton(isHelping:isHelping==true),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    body: Stack(
+      children: [
+        FutureBuilder(
+          // Replace with the actual future that loads the data
+          future: _processJsonData(Map<String, dynamic>()), 
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              // Data has been loaded, display the map with markers
+              return GoogleMap(
+                myLocationEnabled: true,
+                myLocationButtonEnabled: false,
+                compassEnabled: false,
+                mapToolbarEnabled: false,
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: currentCameraPosition,
+                onCameraMove: (position) => currentCameraPosition = position,
+                zoomControlsEnabled: false,
+                markers: _getMarkersForMap(),
+              );
+            } else if (snapshot.hasError) {
+              // Handle error
+              return Center(child: Text('Error loading data'));
+            } else {
+              // Data is still loading, show a loading indicator
+              return Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+        Column(
+          children: [
+            _buildTopFloatingBar(),
+            _buildFilterBar(),
+            isOffline ? _buildOfflineWidget() : Container(),
+          ],
+        ),
+        recenterBtn(_controllerCompleter, currentLocation),
+        actionBtn(isHelping, currentLocation, selectedFilter),
+        SOSButton(isHelping: isHelping == true),
+      ],
+    ),
+  );
 }
+}
+
