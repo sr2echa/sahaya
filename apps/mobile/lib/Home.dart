@@ -243,6 +243,55 @@ class _HomeState extends State<Home> {
     }
   }
 
+  Future<BitmapDescriptor> _createMarkerIcon(String type) async {
+  try {
+    switch (type) {
+      case 'hospital':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/hospital.png');
+      case 'safeSpace':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/safespace.png');
+      case 'reliefCamp':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/reliefcamp.png');
+      case 'food':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/food.png');
+      case 'water':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/water.png');
+      case 'shelter':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/shelter.png');
+      case 'supplies':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/supplies.png');
+      case 'victim':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/victim.png');
+      case 'volunteer':
+        return await BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(28, 28)),
+            'assets/maps/markers/volunteer.png');
+      default:
+        return BitmapDescriptor.defaultMarker;
+    }
+  } catch (e) {
+    print('Error loading marker icon: $e');
+    return BitmapDescriptor.defaultMarker;
+  }
+}
+
+
   void _processJsonData(Map<String, dynamic> data) async {
     List<Marker> hospitals = [];
     List<Marker> reliefCamps = [];
@@ -286,12 +335,6 @@ class _HomeState extends State<Home> {
       'assets/maps/markers/water.png',
     );
 
-
-    // BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
-    //   ImageConfiguration(size: Size(28, 28)),
-    //   'assets/maps/markers/hospital.png',
-    // );
-
     for (var item in data['need']) {
       LatLng location =
           LatLng(item['location']['lat'], item['location']['lng']);
@@ -319,6 +362,8 @@ class _HomeState extends State<Home> {
           onTap: () {
             _showLocationDetails(context, item);
           });
+      // Future marker = _createMarker(item['type'], location.latitude, location.longitude, item);
+      
 
       switch (item['type']) {
         case 'hospital':
@@ -340,13 +385,11 @@ class _HomeState extends State<Home> {
     }
 
     for (var item in data['give']) {
-      LatLng location =
-          LatLng(item['location']['lat'], item['location']['lng']);
+      LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+      // Marker marker = await _createMarker(item['type'], location.latitude, location.longitude, item);
+
       Marker marker = Marker(
-          markerId: MarkerId(
-            item['type'] + location.toString(),
-          ),
-          position: location,
+          markerId: MarkerId(location.toString()),
           anchor: Offset(0.5, 0.5),
           icon: (item['type'] == 'hospital')
             ? hospitalMarker
@@ -365,6 +408,7 @@ class _HomeState extends State<Home> {
                                     : (item['type'] == 'water')
                                         ? waterMarker
                                         : BitmapDescriptor.defaultMarker,
+          position: location,
           onTap: () {
             _showLocationDetails(context, item);
           });
@@ -626,8 +670,6 @@ class _HomeState extends State<Home> {
       if (selectedFilter.isEmpty || selectedFilter == "Food") {
         markers.addAll(_food);
       }
-
-      // Add more conditions here for other 'give' types if necessary
     }
 
     return markers;
