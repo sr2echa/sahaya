@@ -314,7 +314,7 @@ class _HomeState extends State<Home> {
           food.add(marker);
           break;
       }
-    }
+    } 
 
     setState(() {
       _hospitals = hospitals;
