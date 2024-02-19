@@ -85,7 +85,7 @@ def add_data_to_firestore(collection_name, key, data):
     doc_ref.set(current_data)
 
 
-@app.route('/api/v1/',methods = ['POST'])
+@app.route('/api/post/',methods = ['POST'])
 def add_details():
     try:
         data = request.get_json()
@@ -106,22 +106,14 @@ def add_details():
 def get_data_from_firestore():
     doc_ref = db.collection('needs_and_gives')
     docs = doc_ref.stream()
-    data_dict = {"need": [], "give": []}
+    data_list = []
     
     for doc in docs:
-        doc_data = doc.to_dict()
-        if "need" in doc_data:
-            data_dict["need"].append(doc_data["need"])
-        if "give" in doc_data:
-            data_dict["give"].append(doc_data["give"])
-    
-    return jsonify(data_dict), 200
-
+        data_list.append(doc.to_dict())
     
     # Accessing dictionaries by index
     result = {"need":data_list[1]["need"],"give":data_list[0]["give"]}
     return result,200
-    
 
 
 
