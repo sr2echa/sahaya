@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // For custom icons
 import 'dart:convert';
+import 'package:flutter_config/flutter_config.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
 
 class WeatherScreen extends StatefulWidget {
@@ -20,6 +22,8 @@ class _WeatherScreenState extends State<WeatherScreen> {
 
   Future<void> _loadWeatherData() async {
     final jsonString = await rootBundle.loadString('assets/weatherData.json');
+
+    // final jsonString = 
     final jsonData = json.decode(jsonString);
     setState(() {
       weatherData = jsonData;

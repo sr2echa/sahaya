@@ -224,8 +224,7 @@ class _HomeState extends State<Home> {
   // }
 
   Future<void> _loadJsonData() async {
-    final url = Uri.parse(
-        'https://raw.githubusercontent.com/sr2echa/sahaya/main/apps/mobile/assets/backend.schema.json');
+    final url = Uri.parse(FlutterConfig.get('BACKEND_URL') + "/api/v1");
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -242,55 +241,6 @@ class _HomeState extends State<Home> {
       print("Error fetching data: $e");
     }
   }
-
-  Future<BitmapDescriptor> _createMarkerIcon(String type) async {
-  try {
-    switch (type) {
-      case 'hospital':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/hospital.png');
-      case 'safeSpace':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/safespace.png');
-      case 'reliefCamp':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/reliefcamp.png');
-      case 'food':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/food.png');
-      case 'water':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/water.png');
-      case 'shelter':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/shelter.png');
-      case 'supplies':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/supplies.png');
-      case 'victim':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/victim.png');
-      case 'volunteer':
-        return await BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(28, 28)),
-            'assets/maps/markers/volunteer.png');
-      default:
-        return BitmapDescriptor.defaultMarker;
-    }
-  } catch (e) {
-    print('Error loading marker icon: $e');
-    return BitmapDescriptor.defaultMarker;
-  }
-}
-
 
   void _processJsonData(Map<String, dynamic> data) async {
     List<Marker> hospitals = [];
@@ -743,6 +693,47 @@ class _HomeState extends State<Home> {
 
   // -----------------------------------------------------------------------------------------------------------------------------------------------
 
+  void makePostRequest(List<String> selectedHelp, bool isHelping, dynamic lat, dynamic lng) async {
+    final prefs = await SharedPreferences.getInstance();
+    String phoneNumber = prefs.getString('phoneNumber') ?? 'No phone number set';
+
+    String mode = isHelping ? "give" : "need";
+    String type = isHelping ? "volunteer" : "victim";
+    double latitude = lat;
+    double longitude = lng;
+
+    Map<String, dynamic> requestBody = {
+      "mode": mode,
+      "type": type,
+      "location": {"lat": latitude, "lng": longitude},
+      "phone": phoneNumber,
+      "help": selectedHelp,
+    };
+
+    final response = await http.post(
+      Uri.parse(FlutterConfig.get('BACKEND_URL') + "/api/v1"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    if (response.statusCode == 200) {
+      // Request successful
+      print('POST request successful');
+      print('Response: ${response.body}');
+    } else {
+      // Request failed
+      print('POST request failed with status: ${response.statusCode}');
+      print('Response: ${response.body}');
+    }
+  }
+
+  void reloadMapMarkers() async {
+    await _loadJsonData();
+  }
+
+
   void actionButtonClickFn() async {
     final prefs = await SharedPreferences.getInstance();
     String phoneNumber =
@@ -865,7 +856,7 @@ class _HomeState extends State<Home> {
                       ),
                     ),
                     onPressed: isAnyOptionSelected()
-                        ? () {
+                        ? () async {
                             List<String> selectedHelp = helpOptions.entries
                                 .where((entry) => entry.value)
                                 .map((entry) => entry.key)
@@ -873,8 +864,10 @@ class _HomeState extends State<Home> {
                             // Handle the submission logic here
                             print('Phone Number: $phoneNumber');
                             print('Selected Help Options: $selectedHelp');
+                            makePostRequest(selectedHelp, isHelping, currentLocation.latitude, currentLocation.longitude);
                             Navigator.pop(
                                 context); // Close the modal bottom sheet
+                            reloadMapMarkers();
                           }
                         : null,
                   ),
