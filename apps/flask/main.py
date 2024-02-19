@@ -117,7 +117,7 @@ def get_data_from_firestore():
             give_list.extend(data['give'])
     
     result = {"need": need_list, "give": give_list}
-    return result, 200
+    return jsonify(result), 200
 
 
 
