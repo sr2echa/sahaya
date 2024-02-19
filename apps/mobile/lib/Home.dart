@@ -386,91 +386,126 @@ class _HomeState extends State<Home> {
     List<Marker> victims = [];
     List<Marker> food = [];
 
-    Future<BitmapDescriptor> _loadMarkerIcon(String type) async {
-      try {
-        switch (type) {
-          case 'hospital':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/hospital.png');
-          case 'safeSpace':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/safespace.png');
-          case 'reliefCamp':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/reliefcamp.png');
-          case 'food':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/food.png');
-          case 'water':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/water.png');
-          case 'shelter':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/shelter.png');
-          case 'supplies':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/supplies.png');
-          case 'victim':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/victim.png');
-          case 'volunteer':
-            return await BitmapDescriptor.fromAssetImage(
-                ImageConfiguration(size: Size(28, 28)),
-                'assets/markers/volunteer.png');
-          default:
-            return BitmapDescriptor.defaultMarker;
-        }
-      } catch (e) {
-        print('Error loading marker icon: $e');
-        return BitmapDescriptor.defaultMarker;
-      }
+    BitmapDescriptor foodMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/food.png',
+    );
+    BitmapDescriptor hospitalMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/hospital.png',
+    );
+    BitmapDescriptor reliefCampMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/reliefCamp.png',
+    );
+    BitmapDescriptor safeSpaceMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/safeSpace.png',
+    );
+    BitmapDescriptor suppliesMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/supplies.png',
+    );
+    BitmapDescriptor victimMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/victim.png',
+    );
+    BitmapDescriptor volunteerMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/volunteer.png',
+    );
+    BitmapDescriptor waterMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(28, 28)),
+      'assets/maps/markers/water.png',
+    );
+
+    for (var item in data['need']) {
+    LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+    Marker marker = Marker(
+      markerId: MarkerId(location.toString()),
+      anchor: Offset(0.5, 0.5),
+      position: location,
+      icon: (item['type'] == 'hospital')
+        ? hospitalMarker
+        : (item['type'] == 'reliefCamp')
+            ? reliefCampMarker
+            : (item['type'] == 'supplies')
+                ? suppliesMarker
+                : (item['type'] == 'safeSpace')
+                    ? safeSpaceMarker
+                    : (item['type'] == 'volunteer')
+                        ? volunteerMarker
+                        : (item['type'] == 'victim')
+                            ? victimMarker
+                            : (item['type'] == 'food')
+                                ? foodMarker
+                                : (item['type'] == 'water')
+                                    ? waterMarker
+                                    : BitmapDescriptor.defaultMarker,
+      onTap: () {
+        _showLocationDetails(context, item);
+      },
+    );
+
+    switch (item['type']) {
+      case 'hospital':
+        hospitals.add(marker);
+        break;
+      case 'reliefCamp':
+        reliefCamps.add(marker);
+        break;
+      case 'supplies':
+        supplies.add(marker);
+        break;
+      case 'safeSpace':
+        shelters.add(marker);
+        break;
+      case 'volunteer':
+        volunteers.add(marker);
+        break;
     }
+  }
 
-    List<Future<Marker>> createMarkers(List<dynamic> items) {
-      return items.map<Future<Marker>>((item) async {
-        LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
-        return Marker(
-          markerId: MarkerId(location.toString()),
-          anchor: Offset(0.5, 0.5),
-          position: location,
-          icon: await _loadMarkerIcon(item['type']),
-          onTap: () {
-            _showLocationDetails(context, item);
-          },
-        );
-      }).toList();
+  for (var item in data['give']) {
+    LatLng location = LatLng(item['location']['lat'], item['location']['lng']);
+    Marker marker = Marker(
+      markerId: MarkerId(location.toString()),
+      anchor: Offset(0.5, 0.5),
+      position: location,
+      icon: (item['type'] == 'hospital')
+        ? hospitalMarker
+        : (item['type'] == 'reliefCamp')
+            ? reliefCampMarker
+            : (item['type'] == 'supplies')
+                ? suppliesMarker
+                : (item['type'] == 'safeSpace')
+                    ? safeSpaceMarker
+                    : (item['type'] == 'volunteer')
+                        ? volunteerMarker
+                        : (item['type'] == 'victim')
+                            ? victimMarker
+                            : (item['type'] == 'food')
+                                ? foodMarker
+                                : (item['type'] == 'water')
+                                    ? waterMarker
+                                    : BitmapDescriptor.defaultMarker,
+      onTap: () {
+        _showLocationDetails(context, item);
+      },
+    );
+
+    switch (item['type']) {
+      case 'victim':
+        victims.add(marker);
+        break;
+      case 'volunteer':
+        volunteers.add(marker);
+        break;
+      case 'food':
+        food.add(marker);
+        break;
     }
-
-    hospitals = await Future.wait(createMarkers(data['need']
-        .where((item) => item['type'] == 'hospital')
-        .toList()));
-    reliefCamps = await Future.wait(createMarkers(data['need']
-        .where((item) => item['type'] == 'reliefCamp')
-        .toList()));
-    supplies = await Future.wait(createMarkers(data['need']
-        .where((item) => item['type'] == 'supplies')
-        .toList()));
-    shelters = await Future.wait(createMarkers(data['need']
-        .where((item) => item['type'] == 'safeSpace')
-        .toList()));
-    volunteers = await Future.wait(createMarkers(data['need']
-        .where((item) => item['type'] == 'volunteer')
-        .toList()));
-
-    victims = await Future.wait(createMarkers(data['give']
-        .where((item) => item['type'] == 'victim')
-        .toList()));
-    food = await Future.wait(createMarkers(data['give']
-        .where((item) => item['type'] == 'food')
-        .toList()));
+  }
 
     setState(() {
       _hospitals = hospitals;
