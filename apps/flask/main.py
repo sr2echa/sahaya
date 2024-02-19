@@ -106,10 +106,17 @@ def add_details():
 def get_data_from_firestore():
     doc_ref = db.collection('needs_and_gives')
     docs = doc_ref.stream()
-    data_list = []
+    data_dict = {"need": [], "give": []}
     
     for doc in docs:
-        data_list.append(doc.to_dict())
+        doc_data = doc.to_dict()
+        if "need" in doc_data:
+            data_dict["need"].append(doc_data["need"])
+        if "give" in doc_data:
+            data_dict["give"].append(doc_data["give"])
+    
+    return jsonify(data_dict), 200
+
     
     # Accessing dictionaries by index
     result = {"need":data_list[1]["need"],"give":data_list[0]["give"]}
@@ -134,10 +141,6 @@ def add_sub(sub_id,phone):
             )
         novu = SubscriberApi("https://api.novu.co", NOVU_KEY).create(subscriber)
         return 1
-
-
-
-    novu = SubscriberApi("https://api.novu.co", NOVU_KEY).list()
 @app.route('/api/v1/sendtxt', methods=['POST'])
 def send_message():
     sub = request.form.get('sub')
