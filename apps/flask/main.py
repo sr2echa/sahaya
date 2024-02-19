@@ -106,18 +106,14 @@ def add_details():
 def get_data_from_firestore():
     doc_ref = db.collection('needs_and_gives')
     docs = doc_ref.stream()
-    need_list = []
-    give_list = []
+    data_list = []
     
     for doc in docs:
-        data = doc.to_dict()
-        if 'need' in data:
-            need_list.extend(data['need'])
-        if 'give' in data:
-            give_list.extend(data['give'])
+        data_list.append(doc.to_dict())
     
-    result = {"need": need_list, "give": give_list}
-    return jsonify(result), 200
+    # Accessing dictionaries by index
+    result = {"need":data_list[1]["need"],"give":data_list[0]["give"]}
+    return jsonify(result)
 
 
 

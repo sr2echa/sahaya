@@ -155,6 +155,7 @@ cython_debug/
 
 firebase.json
 trial.py
+blah.py
 
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
