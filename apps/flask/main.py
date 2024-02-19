@@ -7,11 +7,12 @@ import json
 from novu.api import EventApi
 from novu.dto.subscriber import SubscriberDto
 from novu.api.subscriber import SubscriberApi
+from novu.dto.event import InputEventDto
 
 from firebase_admin import credentials, initialize_app,firestore
 load_dotenv()
-#cred = credentials.Certificate(json.loads(os.getenv('firebase')))
-cred = credentials.Certificate(r'apps\flask\firebase.json')
+cred = credentials.Certificate(json.loads(os.getenv('firebase')))
+#cred = credentials.Certificate(r'apps\flask\firebase.json')
 firebase_app = initialize_app(cred)
 db=firestore.client()
 
@@ -115,10 +116,33 @@ def get_data_from_firestore():
     return result,200
     
 
+
+
+
+def add_sub(sub_id,phone):
+
+    if (SubscriberApi("https://api.novu.co", NOVU_KEY).get(sub_id)):
+        return 0
+    else:
+        subscriber = SubscriberDto(
+            email="",
+            subscriber_id=sub_id, #This is what the subscriber_id looks like
+            first_name="",  # Optional
+            last_name="",  # Optional
+            phone=phone,  # Optional
+            avatar="",  # Optional
+            )
+        novu = SubscriberApi("https://api.novu.co", NOVU_KEY).create(subscriber)
+        return 1
+
+
+
+    novu = SubscriberApi("https://api.novu.co", NOVU_KEY).list()
 @app.route('/api/v1/sendtxt', methods=['POST'])
 def send_message():
     sub = request.form.get('sub')
     event_api = EventApi("https://api.novu.co", NOVU_KEY)
+    add_sub(sub['id'],sub['phone'])
     try:
         event_api.trigger(
             name="sahaya", # sends emergency message to particulat subscriber 
@@ -128,6 +152,27 @@ def send_message():
         return "Message sent successfully", 200
     except Exception as e:
         return f"Error sending message: {e}", 500
+    
+@app.route('/api/v1/sos', methods=['POST'])
+def sos():
+    try:
+        sos = request.form.get()
+        event=[]
+        for i in sos:
+            add_sub(i['id'],i['phone']) #to ensure he's a sub 
+            event_1 = InputEventDto(
+                name="digest-workflow-example",  # The workflow ID is the slug of the workflow name. It can be found on the workflow page.
+                recipients=i['id'],
+                payload={},  # Your custom Novu payload goes here
+            )
+            event.append(event_1)
+        
+        
+        novu = EventApi("https://api.novu.co", NOVU_KEY).trigger_bulk(events=event)
+        return "SOS", 200
+    except Exception as e:
+        return f"Error sending message: {e}", 500
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=8080, debug=True)
