@@ -302,12 +302,6 @@ class _HomeState extends State<Home> {
     List<Marker> victims = [];
     List<Marker> food = [];
 
-    // BitmapDescriptor icon = await BitmapDescriptor.fromAssetImage(
-    //   ImageConfiguration(size: Size(28, 28)),
-    //   'assets/maps/markers/hospital.png',
-    // );
-
-    
     BitmapDescriptor foodMarker = await BitmapDescriptor.fromAssetImage(
       ImageConfiguration(size: Size(28, 28)),
       'assets/maps/markers/food.png',
@@ -397,8 +391,24 @@ class _HomeState extends State<Home> {
       Marker marker = Marker(
           markerId: MarkerId(location.toString()),
           anchor: Offset(0.5, 0.5),
+          icon: (item['type'] == 'hospital')
+            ? hospitalMarker
+            : (item['type'] == 'reliefCamp')
+                ? reliefCampMarker
+                : (item['type'] == 'supplies')
+                    ? suppliesMarker
+                    : (item['type'] == 'safeSpace')
+                        ? safeSpaceMarker
+                        : (item['type'] == 'volunteer')
+                            ? volunteerMarker
+                            : (item['type'] == 'victim')
+                                ? victimMarker
+                                : (item['type'] == 'food')
+                                    ? foodMarker
+                                    : (item['type'] == 'water')
+                                        ? waterMarker
+                                        : BitmapDescriptor.defaultMarker,
           position: location,
-          icon: await _createMarkerIcon(item['type']),
           onTap: () {
             _showLocationDetails(context, item);
           });
