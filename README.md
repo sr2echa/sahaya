@@ -52,6 +52,15 @@ Ensure that you have the following tools and resources:
 8. **Twilio API**
 9. **Novu API**
 - text-editor of your choice
+- emulator / debug device
+
+  <br><br>
+
+## 🔮 Minimum Requirements
+- 2GB Storage
+- 8GB RAM
+- Intel Pentium + 
+- Windows 7+ (or) Mac OSX 8+
 
 </td>
 <td>
@@ -80,6 +89,7 @@ Ensure that you have the following tools and resources:
     turbo dev --filter=mobile
     
 </samp>
+<br>
 </td>
 </tr>
 </table>
