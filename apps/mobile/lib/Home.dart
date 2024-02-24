@@ -225,6 +225,7 @@ class _HomeState extends State<Home> {
 
   Future<void> _loadJsonData() async {
     final url = Uri.parse(FlutterConfig.get('BACKEND_URL') + "/api/v1");
+    // final url = Uri.parse('https://flask-7i2vfdwx7q-el.a.run.app/api/v1');
     try {
       final response = await http.get(url);
       if (response.statusCode == 200) {
@@ -253,35 +254,35 @@ class _HomeState extends State<Home> {
     List<Marker> food = [];
 
     BitmapDescriptor foodMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/food.png',
     );
     BitmapDescriptor hospitalMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/hospital.png',
     );
     BitmapDescriptor reliefCampMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/reliefCamp.png',
     );
     BitmapDescriptor safeSpaceMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/safeSpace.png',
     );
     BitmapDescriptor suppliesMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/supplies.png',
     );
     BitmapDescriptor victimMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/victim.png',
     );
     BitmapDescriptor volunteerMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/volunteer.png',
     );
     BitmapDescriptor waterMarker = await BitmapDescriptor.fromAssetImage(
-      ImageConfiguration(size: Size(28, 28)),
+      ImageConfiguration(size: Size(50, 50)),
       'assets/maps/markers/water.png',
     );
 
@@ -713,7 +714,7 @@ class _HomeState extends State<Home> {
     final response = await http.post(
       Uri.parse(FlutterConfig.get('BACKEND_URL') + "/api/v1"),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
+        'Content-Type': 'application/json;',
       },
       body: jsonEncode(requestBody),
     );

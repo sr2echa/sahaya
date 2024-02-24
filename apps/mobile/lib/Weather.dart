@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart'; // For custom icons
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:convert';
 import 'package:flutter_config/flutter_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:geolocator/geolocator.dart';
 
 class WeatherScreen extends StatefulWidget {
   @override
@@ -13,21 +15,146 @@ class WeatherScreen extends StatefulWidget {
 
 class _WeatherScreenState extends State<WeatherScreen> {
   late Map<String, dynamic> weatherData = {};
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
     super.initState();
     _loadWeatherData();
+    _initializeNotifications();
+    _startPeriodicNotifications();
   }
 
-  Future<void> _loadWeatherData() async {
-    final jsonString = await rootBundle.loadString('assets/weatherData.json');
+  Future<void> _initializeNotifications() async {
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+    final InitializationSettings initializationSettings =
+        InitializationSettings(android: initializationSettingsAndroid);
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
 
-    // final jsonString = 
-    final jsonData = json.decode(jsonString);
-    setState(() {
-      weatherData = jsonData;
-    });
+  // Future<void> _loadWeatherData() async {
+  //   final jsonString = await rootBundle.loadString('assets/weatherData.json');
+  //   final jsonData = json.decode(jsonString);
+  //   setState(() {
+  //     weatherData = jsonData;
+  //   });
+
+  Future<void> _loadWeatherData() async {
+    Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    final response = await http.get(Uri.parse(FlutterConfig.get('BACKEND_URL')+ '/api/gemini?city='+position.latitude.toString()+','+position.longitude.toString()));
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+
+      setState(() {
+        weatherData = jsonData;
+      });
+    } else {
+      _loadWeatherData();
+    }
+  }
+
+  Future<void> _showNotification() async {
+    final color = weatherData['Color'];
+    final alert = weatherData['Alert'];
+    final time = weatherData['Time'];
+
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+        AndroidNotificationDetails(
+      'weather_channel',
+      'Weather Notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      ticker: 'ticker',
+      styleInformation: BigTextStyleInformation(''),
+    );
+    const NotificationDetails platformChannelSpecifics =
+        NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      1,
+      '$color Alert',
+      '$alert in $time hrs. Click to know more.',
+      platformChannelSpecifics,
+      payload: 'Weather',
+    );
+  }
+
+  Future<void> _startPeriodicNotifications() async {
+    await Future.delayed(Duration(minutes: 20));
+    if (weatherData['Color'].toString().toLowerCase() != 'white') {
+      _showNotification();
+    }
+    _startPeriodicNotifications();
+  }
+
+  IconData _getWeatherIcon(String weather) {
+    switch (weather.toLowerCase()) {
+      case 'partly cloudy':
+        return FontAwesomeIcons.cloudSun;
+      case 'sunny':
+        return FontAwesomeIcons.sun;
+      case 'rainy':
+        return FontAwesomeIcons.cloudShowersHeavy;
+      case 'thunderstorm':
+        return FontAwesomeIcons.bolt;
+      case 'snowy':
+        return FontAwesomeIcons.snowflake;
+      case 'windy':
+        return FontAwesomeIcons.wind;
+      case 'foggy':
+        return FontAwesomeIcons.smog;
+      case 'hail':
+        return FontAwesomeIcons.cloudMeatball;
+      default:
+        return FontAwesomeIcons.questionCircle;
+    }
+  }
+
+  Color _getColor(String color) {
+    switch (color.toLowerCase()) {
+      case 'white':
+        return Colors.white;
+      case 'red':
+        return Colors.red;
+      case 'orange':
+        return Colors.orange;
+      case 'yellow':
+        return Colors.yellow;
+      case 'green':
+        return Colors.green;
+      default:
+        return Colors.transparent;
+    }
+  }
+
+  List<Widget> _buildPrecautionItems(List<dynamic> precautions) {
+    return precautions
+        .map(
+          (precaution) => Padding(
+            padding: const EdgeInsets.only(left: 40.0, right: 40.5),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ListTile(
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 0),
+                  dense: true,
+                  leading: Icon(Icons.circle, size: 10),
+                  title: Text(
+                    precaution,
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.kanit().fontFamily,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 4),
+              ],
+            ),
+          ),
+        )
+        .toList();
   }
 
   @override
@@ -40,8 +167,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const SizedBox(height: 0.1),
-                  // Display the colored dot above the icon
                   SizedBox(
                     width: 20,
                     height: 20,
@@ -53,7 +178,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  // Display the weather icon and description
                   Icon(
                     _getWeatherIcon(weatherData['weather']),
                     size: 150,
@@ -80,7 +204,7 @@ class _WeatherScreenState extends State<WeatherScreen> {
                       child: Text(
                         'In ${weatherData["Time"]} hrs',
                         style: GoogleFonts.kanit(
-                          textStyle:const  TextStyle(
+                          textStyle: const TextStyle(
                             color: Colors.white,
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -90,7 +214,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  // Display the precautions
                   Expanded(
                     child: SingleChildScrollView(
                       child: Column(
@@ -109,64 +232,5 @@ class _WeatherScreenState extends State<WeatherScreen> {
               ),
             ),
     );
-  }
-
-  // Function to map weather description to FontAwesome icons
-  IconData _getWeatherIcon(String weather) {
-    switch (weather.toLowerCase()) {
-      case 'partly cloudy':
-        return FontAwesomeIcons.cloudSun;
-      case 'sunny':
-        return FontAwesomeIcons.sun;
-      case 'rainy':
-        return FontAwesomeIcons.cloudShowersHeavy;
-      // Add more cases for other weather conditions
-      default:
-        return FontAwesomeIcons.questionCircle;
-    }
-  }
-
-  // Function to map color string to Color object
-  Color _getColor(String color) {
-    switch (color.toLowerCase()) {
-      case 'white':
-        return Colors.white;
-      case 'red':
-        return Colors.red;
-      // Add more cases for other colors
-      default:
-        return Colors.transparent;
-    }
-  }
-
-  // Function to build list of precaution items
-  List<Widget> _buildPrecautionItems(List<dynamic> precautions) {
-    return precautions
-        .map(
-          (precaution) => Padding(
-            padding: const EdgeInsets.only(
-                left: 40.0, right: 40.5), // Adjust the value as needed
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ListTile(
-                  contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 0), // Adjust the horizontal padding
-                  dense: true,
-                  leading: Icon(Icons.circle, size: 10),
-                  title: Text(
-                    precaution,
-                    style: TextStyle(
-                      fontFamily: GoogleFonts.kanit().fontFamily,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 4), // Adjust the height as needed
-              ],
-            ),
-          ),
-        )
-        .toList();
   }
 }

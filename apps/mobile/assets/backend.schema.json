@@ -3,8 +3,8 @@
         {
             "type" : "hospital",
             "location" : {
-                "lat" : 12.6612733,
-                "lng" : 80.1792617
+                "lat" : 12.978806,
+                "lng" : 80.221249
             },
             "phone" : "415-555-5555",
             "help" : ["medical"]
@@ -21,8 +21,8 @@
         {
             "type" : "reliefCamp",
             "location" : {
-                "lat" : 12.6712733,
-                "lng" : 80.1742617
+                "lat" : 12.970462,
+                "lng" : 80.220511
             },
             "phone" : "415-555-5555",
             "help" : ["food", "shelter"]
@@ -30,8 +30,8 @@
         {
             "type" : "supplies",
             "location" : {
-                "lat" : 12.7749295,
-                "lng" : 80.4194155
+                "lat" : 12.991336,
+                "lng" : 80.213011
             },
             "phone" : "415-555-5555",
             "help" : ["food", "water", "clothing"]
@@ -39,8 +39,8 @@
         {
             "type" : "safeSpace",
             "location" : {
-                "lat" : 12.6949295,
-                "lng" : 80.1744155
+                "lat" : 12.977344,
+                "lng" : 80.220393
             },
             "phone" : "415-555-5555",
             "help" : ["shelter"]
@@ -51,8 +51,8 @@
         {    
             "type" : "victim",
             "location" : {
-                "lat" : 37.8749295,
-                "lng" : 79.4194155
+                "lat" : 12.980632,
+                "lng" : 80.213296
             },
             "phone" : "415-555-5555",
             "help" : ["food"]
@@ -60,8 +60,8 @@
         {    
             "type" : "volunteer",
             "location" : {
-                "lat" : 37.7749295,
-                "lng" : 79.4194155
+                "lat" : 12.978105,
+                "lng" : 80.228244
             },
             "phone" : "415-555-5555",
             "help" : ["food"]
@@ -69,8 +69,8 @@
         {
             "type" : "food",
             "location" : {
-                "lat" : 12.7749295,
-                "lng" : 80.4194155
+                "lat" : 12.973719,
+                "lng" : 80.223965
             },
             "phone" : "415-555-5555",
             "help" : ["food"]

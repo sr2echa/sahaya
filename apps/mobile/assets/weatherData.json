@@ -1,14 +1,11 @@
 {
     "Color": "red",
-    "weather": "Rainy",
-    "Alert": null,
+    "weather": "Thunderstorm",
+    "Alert": "Severe Thunderstorm Warning",
     "Time":"4",
     "Precautions": [
-     "Stay hydrated by drinking plenty of fluids.",
-     "Avoid strenuous outdoor activities during the hottest part of the day.",
-     "Wear loose, lightweight clothing made from natural fibers.",
-     "Take precautions to protect your skin from the sun, such as wearing a hat, sunglasses, and sunscreen.",
-     "Check on elderly neighbors and relatives to make sure they are staying cool and hydrated.",
-     "Keep your pets indoors during the hottest part of the day."
+     "There will be severe water logging in your area. Avoid going out if possible and get all supplies beforehand.",
+     "About 2-3 inches of rain are expected. Be prepared for possible flooding and plce all valuables in a safe place.",
+     "Temperatures will reach upto a minimum of 21° C. So keep yourself warm and dry."
     ]
    }

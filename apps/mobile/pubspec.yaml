@@ -26,6 +26,9 @@ dependencies:
   modal_bottom_sheet:
   flutter_svg:
   http:
+  flutter_local_notifications:
+  timezone:
+
 
 dev_dependencies:
   flutter_test:
