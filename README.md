@@ -54,7 +54,7 @@ Ensure that you have the following tools and resources:
 - text-editor of your choice
 - emulator / debug device
 
-  <br><br>
+  <br>
 
 ## 🔮 Minimum Requirements
 - 2GB Storage
