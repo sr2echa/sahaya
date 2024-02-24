@@ -1,114 +1,14 @@
-<samp><h3 align = center>
-
-Trailer for sahaya just got released! you can view it on <br>
-<img src="https://raw.githubusercontent.com/github/explore/d744245de144b89f3e3462949e08bfc91eda7fcf/topics/youtube/youtube.png" width=15>
-[YouTube](https://youtu.be/FVuFdDk8XGk) 
-
-</h3></samp>
-
-![---](https://github.com/sr2echa/sahaya/assets/65058816/f3d34e7c-34f4-43ab-b783-9eb0b27bc188)
-<br>
-
->[!NOTE]
-> Any Line containing a ` ▶ ` in the start is a clickable **`Dropdown menu`**. Click on the line to expand the cascaded content
-
 ![](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
 
 # <samp>Sahaya : Bridging Help in Crisis</samp>
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
 
-<samp>
-<details>
-  <summary> <h3> 
-    
-  The demographics of disasters in the **World** and in **India** 
-    
-  </h3> </summary>
-
-  
-  ![](https://github.com/sr2echa/sahaya/assets/65058816/be68c167-4163-4c50-a568-fb1995bb1dd6)
-
-
-</details>
-</samp>
-
-<samp>
-<summary> <h2>🔮 What did we find after a research conducted with over <ins>1.1k participants</ins> ?</h2> </summary>
-
-We conducted an initial survey involving <kbd>1100+ responses</kbd> over <code>11 countries</code> asking their inputs and experiences. Here is an excerpt of the results:
-
-<details>
-<summary> <h4> 👈 These were the responses </h4> </summary>
-<table>
-  <tr>
-    <td> <img src="./assets/survey/Q6.png"> </td>
-    <td> <img src="./assets/survey/Q7.png"> </td>
-  </tr>
-    <tr>
-        <td> <img src="./assets/survey/Q8.png"> </td>
-        <td> <img src="./assets/survey/Q9.png"> </td>
-    </tr>
-    <tr>
-        <td> <img src="./assets/survey/Q10.png"> </td>
-        <td> <img src="./assets/survey/Q11.png"> </td>
-    </tr>
-    <tr>
-        <td> <img src="./assets/survey/Q12.png"> </td>
-        <td> <img src="./assets/survey/Q5.png"> </td>
-</table>
-</details>
-
-> - On an average, <b> 84+ % </b> of the people were directly affected by some climate crisis. <br> 
-> - A vast section of people have faced difficulty in getting essentials during a crisis. <br>
-> - The public opinion is that community support is the most effective way to get help during a crisis. <br>
-> - Majority of the people are willing to help others during a crisis. <br>
-> - People understand the importance of climate change and individual contribution to climate action. <br>
-
-<h4> We also continued the survey and asked the participants to give their inputs on the app. </h4>
-
-<details>
-<summary> <h4> 👈 Here is what we found: </h4> </summary>
-
-<table>
-  <tr>
-    <td> <img src="./assets/survey/Q1.png"> </td>
-    <td> <img src="./assets/survey/Q4.png"> </td>
-    </tr>
-</table>
-</details>
-
-> - People highly believe that the app will be useful to combat crisis. <br>
-> - People are willing to use the app to help others and to seek help. <br>
-<br>
-<img src="https://github.com/sr2echa/sahaya/assets/65058816/ae8135c2-7eba-44a9-a98d-f0202426fbda" width=600 align=center>
-
-
-<br> View more of our responses @ [./assets/survey](./assets/survey)
-
-<h3> 
-  
-  You too can fill in the form [here](https://forms.gle/M3ubWpjqPQrtxnkh6)! 
-  
-</h3>
-</samp>
-
-<samp>
-<details>
-  <summary><h2> How Sahaya Will Work (Overview) </h2></summary>
-
-
-  ![](https://github.com/sr2echa/sahaya/assets/65058816/a3a61616-6047-4973-97b0-da7f81a3c8aa)
-
-
-</details>
-</samp>
-
 
 # ✨ Features
-- Resource mapping
-- **Will work even when Offline!** >>>  _yea you heard us right ;)_
-- Predicted weather warnings and precautions <br><br>
-and much more...  🤫
+<p align=center>
+  <img src="https://github.com/sr2echa/sahaya/assets/65058816/4c004ad5-e76f-4ef1-b116-ecfaa3822368" width=40%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/39208eed-e6ff-422b-a85c-aaefb00c67b8" width=40%>
+  <img src="https://github.com/sr2echa/sahaya/assets/65058816/525a6ee7-b960-4dc8-8757-1e5deb2afd07" width=40%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/3b36bc68-309f-48b7-8dc1-890f5e0410cf" width=40%>
+</p>
 
 # 📱 Preview
 
@@ -142,10 +42,12 @@ Ensure that you have the following tools and resources installed before using Sa
 1. **Flutter SDK** 
 2. **Android Studio** 
 3. **Python 3.6+** 
-4. **Gemini API** .
+4. **Gemini API**
 5. **Google Cloud Platform (GCP) Account** 
 6. **Firebase** 
 7. **pnpm**
+8. **Twilio API**
+9. **Novu API**
 
 
 ### 🪴 Usage:
@@ -175,16 +77,21 @@ Follow these steps to set up and run Sahaya:
 
 
 **These steps will ensure a smooth setup and execution of Sahaya on your local machine**
+</samp>
+</details>
+
+<details>
+<summary>
+  
+# 💻 Tech Stack
+
+</summary>
+<img src="https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b">
 </details>
 
 
-# Tech Stack
-</samp>
-
-![](https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b)
-
 # 🦄 Acknowledgments
-#### We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing!
+We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
 
 --- 
 <h6> <samp>
