@@ -31,18 +31,16 @@ Sahaya is an innovative disaster relief app designed to strengthen community res
 
 
 
-
-<details>
-<summary>
-
 # ![⚙️ Installation](https://github.com/sr2echa/sahaya/assets/65058816/6ff587ec-5be2-40ce-a170-5ca3211ea41f)
 
-</summary>
+<table>
+<tr>
+<td>
 
+  
+## 📝 Prerequisites:
 
-### 📝 Prerequisites:
-
-Ensure that you have the following tools and resources installed before using Sahaya:
+Ensure that you have the following tools and resources:
 
 1. **Flutter SDK** 
 2. **Android Studio** 
@@ -53,11 +51,12 @@ Ensure that you have the following tools and resources installed before using Sa
 7. **pnpm**
 8. **Twilio API**
 9. **Novu API**
+- text-editor of your choice
 
+</td>
+<td>
 
-### 🪴 Usage:
-
-Follow these steps to set up and run Sahaya:
+## 🪴 Usage:
 
 #### 1. Clone the repository:
 
@@ -71,7 +70,7 @@ Follow these steps to set up and run Sahaya:
 
     flutter pub get
 
-#### 4. Update `.env`
+#### 4. Update `.env` (in both /mobile & /flask)
 #### 5. Open a `emulator`
 
 #### 6. Run the application:
@@ -79,11 +78,11 @@ Follow these steps to set up and run Sahaya:
     turbo dev
 ######    or with a filter for mobile:
     turbo dev --filter=mobile
-
-
-**These steps will ensure a smooth setup and execution of Sahaya on your local machine**
+    
 </samp>
-</details>
+</td>
+</tr>
+</table>
 
   
 # ![💻 Tech Stack](https://github.com/sr2echa/sahaya/assets/65058816/95fd84e7-66b3-4114-b023-783a70aad800)
