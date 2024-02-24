@@ -1,6 +1,8 @@
-![](https://github.com/sr2echa/sahaya/assets/65058816/560e2f35-633e-479b-b619-ad36d94d983b)
+![image](https://github.com/sr2echa/sahaya/assets/65058816/32a8ad3f-9ae0-4504-88a5-5c5fa91b1e19)
 
-# <samp>Sahaya : Bridging Help in Crisis</samp>
+
+# ![<samp>Sahaya : Bridging Help in Crisis</samp>](https://github.com/sr2echa/sahaya/assets/65058816/fe87756f-842c-45de-a66d-8693f27c5959)
+
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
 
 
@@ -33,7 +35,8 @@ Sahaya is an innovative disaster relief app designed to strengthen community res
 <details>
 <summary>
 
-# ⚙️ Installation
+# ![⚙️ Installation](https://github.com/sr2echa/sahaya/assets/65058816/6ff587ec-5be2-40ce-a170-5ca3211ea41f)
+
 </summary>
 
 
