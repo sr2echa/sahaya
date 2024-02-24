@@ -4,13 +4,15 @@
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
 
 
-# ✨ Features
+# ![✨ Features](https://github.com/sr2echa/sahaya/assets/65058816/5089d132-eac9-4587-8291-e472f1f8cf62)
+
 <p align=center>
-  <img src="https://github.com/sr2echa/sahaya/assets/65058816/4c004ad5-e76f-4ef1-b116-ecfaa3822368" width=40%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/39208eed-e6ff-422b-a85c-aaefb00c67b8" width=40%>
-  <img src="https://github.com/sr2echa/sahaya/assets/65058816/525a6ee7-b960-4dc8-8757-1e5deb2afd07" width=40%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/3b36bc68-309f-48b7-8dc1-890f5e0410cf" width=40%>
+  <img src="https://github.com/sr2echa/sahaya/assets/65058816/4c004ad5-e76f-4ef1-b116-ecfaa3822368" width=48.5%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/39208eed-e6ff-422b-a85c-aaefb00c67b8" width=48.5%>
+  <img src="https://github.com/sr2echa/sahaya/assets/65058816/525a6ee7-b960-4dc8-8757-1e5deb2afd07" width=48.5%> <img src="https://github.com/sr2echa/sahaya/assets/65058816/3b36bc68-309f-48b7-8dc1-890f5e0410cf" width=48.5%>
 </p>
 
-# 📱 Preview
+# ![📱 Preview](https://github.com/sr2echa/sahaya/assets/65058816/545d49ec-f141-4ae4-b5f1-a3f0fb3b0f8c)
+
 
 <table>
   <tr>
@@ -80,17 +82,15 @@ Follow these steps to set up and run Sahaya:
 </samp>
 </details>
 
-<details>
-<summary>
   
-# 💻 Tech Stack
+# ![💻 Tech Stack](https://github.com/sr2echa/sahaya/assets/65058816/95fd84e7-66b3-4114-b023-783a70aad800)
 
-</summary>
-<img src="https://github.com/sr2echa/sahaya/assets/65058816/4cb4087d-f824-4b0f-b477-a41ad6a9312b">
-</details>
+![image](https://github.com/sr2echa/sahaya/assets/65058816/afe995f7-7a02-4120-a465-d2e449c76c74)
 
 
-# 🦄 Acknowledgments
+
+# ![🦄 Acknowledgments](https://github.com/sr2echa/sahaya/assets/65058816/76cc1c9d-a676-4703-83b5-cec48a077f8d)
+
 We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
 
 --- 
