@@ -16,16 +16,47 @@ Sahaya is an innovative disaster relief app designed to strengthen community res
 # ![📱 Preview](https://github.com/sr2echa/sahaya/assets/65058816/545d49ec-f141-4ae4-b5f1-a3f0fb3b0f8c)
 
 
-<table>
+<table align=center>
   <tr>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/6ea2f6d7-70d1-4206-bc2b-58add2264b74"></td>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/6a4dbc9c-9198-4a29-9ffe-814277206b00"></td>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/78ef638a-f1f9-4242-b635-7779e2d3e711"></td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>Sahaya</h2>
+      Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises
+      <br><br>
+      <img src="https://github.com/sr2echa/sahaya/assets/65058816/6ea2f6d7-70d1-4206-bc2b-58add2264b74">
+    </td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>Simple Onboarding</h2>
+      Simplified UI and streamlined UX makes the app intutive and seamlessly easy to use!
+      <br><br>
+      <video src="https://github.com/sr2echa/sahaya/assets/65058816/4cb927cc-48ac-49e6-a11d-fc0a46813244">
+    </td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>Disaster Management. <br> At its finest.</h2>
+      With Sahaya, preparedness quick response and community collaboration becomes the pillars of effective disaster management
+      <br><br>
+      <video src="https://github.com/sr2echa/sahaya/assets/65058816/e5c2b8f0-5402-4603-90a4-0b98737b3589">
+      </td>
   </tr>
+  
   <tr>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/60502bc9-5ec9-4790-b042-bcdad9ebaa3c"></td>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/c7ba6e3a-4729-4955-85e3-a56a724bc521"></td>
-    <td><img src="https://github.com/sr2echa/sahaya/assets/65058816/bdfb04df-c0f6-4dda-a943-3641eea23ae5"></td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>Your Personalized AI Weather Companion</h2>
+      Stay one step ahead of disasters with personalized alerts on upcoming natural calamities and receive tailored precautions based on your location. Because being prepared is the key to saving lives.
+      <br><br>
+      <video src="https://github.com/sr2echa/sahaya/assets/65058816/4943c7e5-d3ec-49ca-b504-f8bd6026df3b">
+    </td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>No internet? No problem! </h2>
+      Sahaya works seamlessly offline, ensuring real-time data on nearby assistance needs and offerings. Be a helping hand, anytime, anywhere. Thanks to our sms-as-an-api for making it possible :)
+      <br><br>
+      <video src="https://github.com/sr2echa/sahaya/assets/65058816/f408497f-dfa5-49ca-933b-fb34372be94a">
+    </td>
+    <td width=33% style="text-align: center;">
+      <h2 align=center>Dedicated SOS functionalities</h2>
+      With just a tap, you can instantly alert your emergency contacts, ensuring swift assistance and prioritizing your safety above all else. When disaster strikes, count on Sahaya as your lifeline.
+      <br><br>
+      <video src="https://github.com/sr2echa/sahaya/assets/65058816/1f84699b-4b19-4aa4-b5b3-409a19e49a54">
+    </td>
   </tr>
 </table>
 
@@ -35,9 +66,8 @@ Sahaya is an innovative disaster relief app designed to strengthen community res
 
 <table>
 <tr>
-<td>
+<td width=48.5%>
 
-  
 ## 📝 Prerequisites:
 
 Ensure that you have the following tools and resources:
@@ -63,7 +93,7 @@ Ensure that you have the following tools and resources:
 - Windows 7+ (or) Mac OSX 8+
 
 </td>
-<td>
+<td width=48.5%>
 
 ## 🪴 Usage:
 
