@@ -135,6 +135,8 @@ Ensure that you have the following tools and resources:
 
 We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
 
+Special thanks to [Vikranth](https://www.instagram.com/vikranth_jagdish) for helping with the video.
+
 --- 
 <h6> <samp>
 
