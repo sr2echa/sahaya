@@ -1,3 +1,12 @@
+<samp>
+
+> <h3 align=center><a>Feature demo of sahaya just got released! you can view it on <img src="https://raw.githubusercontent.com/github/explore/d744245de144b89f3e3462949e08bfc91eda7fcf/topics/youtube/youtube.png" width=15> <a href="https://youtu.be/GQ0U3niGyw0"> YouTube</a></a></h3>
+
+</samp>
+
+![---](https://github.com/sr2echa/sahaya/assets/65058816/f3d34e7c-34f4-43ab-b783-9eb0b27bc188)
+<br>
+
 ![image](https://github.com/sr2echa/sahaya/assets/65058816/32a8ad3f-9ae0-4504-88a5-5c5fa91b1e19)
 
 
@@ -199,9 +208,11 @@ Ensure that you have the following tools and resources:
 
 # ![🦄 Acknowledgments](https://github.com/sr2echa/sahaya/assets/65058816/76cc1c9d-a676-4703-83b5-cec48a077f8d)
 
-We are highly thankful to all those who were part of our product research and filled the form. We got more feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
+> We are highly thankful to all those who were part of our product research. We got tons of feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
 
-Special thanks to [Vikranth](https://www.instagram.com/vikranth_jagdish) for helping with the video.
+> Special thanks to [Vikranth](https://www.instagram.com/vikranth_jagdish) for helping with the video.
+
+> We'd also like to thank our testing group who helped shape our application.
 
 --- 
 <h6> <samp>
