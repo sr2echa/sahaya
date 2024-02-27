@@ -1,12 +1,3 @@
-<samp>
-
-> <h3 align=center><a>Feature demo of sahaya just got released! you can view it on <img src="https://raw.githubusercontent.com/github/explore/d744245de144b89f3e3462949e08bfc91eda7fcf/topics/youtube/youtube.png" width=15> <a href="https://youtu.be/GQ0U3niGyw0"> YouTube</a></a></h3>
-
-</samp>
-
-![---](https://github.com/sr2echa/sahaya/assets/65058816/f3d34e7c-34f4-43ab-b783-9eb0b27bc188)
-<br>
-
 ![image](https://github.com/sr2echa/sahaya/assets/65058816/32a8ad3f-9ae0-4504-88a5-5c5fa91b1e19)
 
 
@@ -14,6 +5,11 @@
 
 Sahaya is an innovative disaster relief app designed to strengthen community resilience in the face of climate crises. This user-friendly platform bridges the gap between those in need of essentials and those willing to offer help during natural disasters. It's not just a tool for NGOs and emergency responders; it empowers every individual to be a part of a larger community support system. With Sahaya, preparedness, quick response, and community collaboration become the pillars of effective disaster management.
 
+<samp>
+
+> <h3><a>Feature demo of sahaya just got released! you can view it on <img src="https://raw.githubusercontent.com/github/explore/d744245de144b89f3e3462949e08bfc91eda7fcf/topics/youtube/youtube.png" width=15> <a href="https://youtu.be/GQ0U3niGyw0"> YouTube</a></a></h3>
+
+</samp>
 
 # ![✨ Features](https://github.com/sr2echa/sahaya/assets/65058816/5089d132-eac9-4587-8291-e472f1f8cf62)
 
