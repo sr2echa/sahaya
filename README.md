@@ -129,6 +129,8 @@ Ensure that you have the following tools and resources:
 
 ![image](https://github.com/sr2echa/sahaya/assets/65058816/afe995f7-7a02-4120-a465-d2e449c76c74)
 
+<hr>
+
 > [!IMPORTANT]  
 > Your can view the responses and all the Data Points from both the surveys @ [assets/survey](https://github.com/sr2echa/sahaya/tree/main/assets/survey). 
 
