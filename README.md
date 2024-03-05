@@ -206,7 +206,7 @@ Ensure that you have the following tools and resources:
 
 > We are highly thankful to all those who were part of our product research. We got tons of feedback, ideas & suggestions that we are actively developing and many of which we put into effect!
 
-> Special thanks to [Vikranth](https://www.instagram.com/vikranth_jagdish) for helping with the video.
+> Special thanks to <samp> [Vikranth](https://www.instagram.com/vikranth_jagdish) </samp> for helping with the video.
 
 > We'd also like to thank our testing group who helped shape our application.
 
@@ -214,7 +214,7 @@ Ensure that you have the following tools and resources:
 <h6> <samp>
 
 📜 Licensed under [MIT License](./LICENSE) <br>
- Made for GDSC Solution Challenge 2024 with 💖
+ Made for GDSC Solution Challenge 2024 & IEEE Yesist12 2024 with 💖
 
 </samp>
 </h6>
